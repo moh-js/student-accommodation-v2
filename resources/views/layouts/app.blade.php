@@ -28,7 +28,7 @@
         {{-- <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" /> --}}
         {{-- <meta content="Themesdesign" name="author" /> --}}
         <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
         <!-- Bootstrap Css -->
         <link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
@@ -103,11 +103,11 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <script>document.write(new Date().getFullYear())</script> © Nazox.
+                                    Copyright © {{ now()->year }}  Mbeya University of Science and Technology
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="text-sm-right d-none d-sm-block">
-                                        Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign
+                                    <div class="text-sm-right d-none d-md-block">
+                                        Developed and Maintained By:  <a href="https://must.ac.tz" target="_blank">Mbeya University of Science and Technology</a>
                                     </div>
                                 </div>
                             </div>

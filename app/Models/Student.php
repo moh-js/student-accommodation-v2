@@ -5,6 +5,7 @@ namespace App\Models;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,9 +14,14 @@ class Student extends Model
 {
     use HasFactory;
     use HasSlug;
+    use Notifiable;
     use SoftDeletes;
 
     protected $guarded = [];
+
+    public function routeNotificationForSmsApi() {
+        return $this->phone;
+    }  
 
     public function getSlugOptions(): SlugOptions
     {

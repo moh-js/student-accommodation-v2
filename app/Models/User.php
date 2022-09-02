@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use Laravolt\Avatar\Avatar;
 use Spatie\Sluggable\HasSlug;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Sluggable\SlugOptions;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -52,8 +53,25 @@ class User extends Authenticatable
         return 'slug';
     }
 
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->middle_name} {$this->last_name}";
+    }
+
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
     public function scopeGetUsers($query)
     {
         return $query->where('id', '!=', auth()->id())->get();
+    }
+
+    public function getImageAttribute()
+    {
+        // generate user initials avatar
+        $avatar = new Avatar();
+        return $avatar->create($this->name)->setBackground('#505d69')->toBase64();
     }
 }

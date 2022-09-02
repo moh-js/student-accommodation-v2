@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('title')
-    Edit {{ $group->proper_name }}
+    Edit {{ $role->proper_name }}
 @endpush
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('groups.update', $group->name) }}" method="post">
+                    <form action="{{ route('roles.update', $role->name) }}" method="post">
                         @csrf
                         @method('PUT')
 
@@ -18,7 +18,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" name="name" id="name" value="{{ old('name')??$group->name }}" class="form-control @error('name') is-invalid @enderror" placeholder="Enter first name">
+                                    <input type="text" name="name" id="name" value="{{ old('name')??$role->name }}" class="form-control @error('name') is-invalid @enderror" placeholder="Enter first name">
 
                                     @error('name')
                                         <div class="invalid-feedback">
@@ -31,7 +31,7 @@
 
                             <div class="col-12">
                                 <div class="form-group">
-                                    <a href="{{ route('groups.index') }}" class="btn btn-danger waves-effect waves-light">Back <i class="ri-arrow-go-back-line align-middle"></i></a>
+                                    <a href="{{ route('roles.index') }}" class="btn btn-danger waves-effect waves-light">Back <i class="ri-arrow-go-back-line align-middle"></i></a>
 
                                     <button type="submit" class="btn btn-primary waves-effect waves-light w-md">Update <i class="ri-save-line align-middle"></i></button>
                                 </div>

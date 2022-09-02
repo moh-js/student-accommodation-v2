@@ -10,7 +10,7 @@
                 ], [
                     'title' => 'Add', 'url' => route('users.create'), 'permission' => request()->user()->hasAnyPermission('user-add')
                 ], [
-                    'title' => 'Groups', 'url' => route('groups.index'), 'permission' => request()->user()->hasAnyPermission('role-view')
+                    'title' => 'Groups', 'url' => route('roles.index'), 'permission' => request()->user()->hasAnyPermission('role-view')
                 ]
             ]),
         ], [
@@ -24,6 +24,8 @@
                     'title' => 'Room List', 'url' => route('rooms.index'), 'permission' => request()->user()->hasAnyPermission('room-view')
                 ]
             ]),
+        ], [
+            'title' => 'Students', 'url' => route('students.index'), 'permission' => request()->user()->hasAnyPermission('student-view'), 'icon' => 'ri-user-2-line', 'childrens' => collect(),
         ], [
             'title' => 'Applications', 'url' => route('applications-list'), 'permission' => request()->user()->hasAnyPermission('application-view'), 'icon' => 'ri-survey-line', 'childrens' => collect(),
         ], [

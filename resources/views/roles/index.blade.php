@@ -9,13 +9,13 @@
     <div class="col-12">
 
         <div class="text-right mb-2">
-            <a href="{{ route('groups.create') }}" class="btn btn-primary">Add new group</a>
+            <a href="{{ route('roles.create') }}" class="btn btn-primary">Add New Role</a>
         </div>
 
         <div class="card">
             <div class="card-body">
 
-                <table id="datatable" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                <table id="datatable" class="table dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -40,12 +40,12 @@
                                     @if ($role->deleted_at)
                                         <a href="javascript:void(0)" onclick="$('#{{ $role->name }}').submit()" class="btn btn-info waves-effect waves-light btn-sm"><i class=" ri-arrow-left-right-line"></i></a>
                                     @else
-                                        <a href="{{ route('groups.edit', $role->name) }}" class="btn btn-success waves-effect waves-light btn-sm"><i class="ri-shield-keyhole-line"></i></a>
-                                        <a href="{{ route('groups.edit', $role->name) }}" class="btn btn-warning waves-effect waves-light btn-sm"><i class="ri-edit-line"></i></a>
+                                        <a href="{{ route('roles.show', $role->name) }}" class="btn btn-success waves-effect waves-light btn-sm"><i class="ri-shield-keyhole-line"></i></a>
+                                        <a href="{{ route('roles.edit', $role->name) }}" class="btn btn-warning waves-effect waves-light btn-sm"><i class="ri-edit-line"></i></a>
                                         <a href="javascript:void(0)" onclick="$('#{{ $role->name }}').submit()" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-line"></i></a>
 
                                     @endif
-                                    <form id="{{ $role->name }}" action="{{ route('groups.destroy', $role->name) }}" method="post">@csrf @method('DELETE')</form>
+                                    <form id="{{ $role->name }}" action="{{ route('roles.destroy', $role->name) }}" method="post">@csrf @method('DELETE')</form>
                                 </td>
                             </tr>
                         @endforeach

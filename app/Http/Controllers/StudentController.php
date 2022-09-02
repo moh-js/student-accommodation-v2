@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class StudentController extends Controller
 {
@@ -14,7 +15,11 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('student-view');
+
+        return view('students.index', [
+            'students' => Student::paginate(20)
+        ]);
     }
 
     /**
@@ -24,7 +29,11 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
+        // return ($programmes);
+        return view('students.add', [
+            'programmes' => collect($programmes)->sortBy('name')
+        ]);
     }
 
     /**
@@ -80,6 +89,17 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        if ($student->trashed()) {
+            $this->authorize('student-activate');
+            $student->restore();
+            $action = 'restored';
+        } else {
+            $this->authorize('student-deactivate');
+            $student->delete();
+            $action = 'deleted';
+        }
+
+        toastr()->success("group $action successfully");
+        return redirect()->route('students.index');
     }
 }

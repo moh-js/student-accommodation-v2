@@ -9,7 +9,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('groups.store') }}" method="post">
+                    <form action="{{ route('roles.store') }}" method="post">
                         @csrf
 
                         <div class="row">

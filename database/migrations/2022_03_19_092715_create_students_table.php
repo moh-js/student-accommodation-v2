@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('username')->unique()->comment('registration_# or form_4_index_#');
+            $table->string('username')->comment('registration_# or form_4_index_#');
             $table->enum('award', [
                 'diploma', 'bachelor', 'masters', 'PhD'
             ])->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('programme')->nullable();
             $table->string('level')->nullable();
             $table->string('phone');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->foreignId('gender_id')->constrained()->cascadeOnDelete();
             $table->enum('student_type', [
                 'fresher', 'continuous', 'foreigner', 'disabled'

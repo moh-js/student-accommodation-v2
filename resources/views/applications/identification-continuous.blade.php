@@ -58,7 +58,6 @@
     </div>
 </div>
 
-<div style="padding: 10px;">
+@include('layouts.partials.footer')
 
-</div>
 @endsection

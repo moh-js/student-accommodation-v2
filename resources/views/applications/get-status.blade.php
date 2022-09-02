@@ -8,7 +8,7 @@
         <div class="container">
             <div class="card mt-5">
                 <div class="card-body">
-                    <span class="card-title" style="font-size: 18px;"><strong>CHeck Application</strong></span>
+                    <span class="card-title" style="font-size: 18px;"><strong>Check Application</strong></span>
                     <hr>
                     <p>Enter your registration number or application ID to check your application</p>
 
@@ -56,4 +56,7 @@
         </div>
     </div>
 </div>
+
+@include('layouts.partials.footer')
+
 @endsection

@@ -35,6 +35,7 @@ class StudentFactory extends Factory
             'gender_id' => $genderNumber+1,
             'student_type' => $student_type[$this->faker->numberBetween(0,3)],
             'sponsor' => $sponsor[$this->faker->numberBetween(0,2)],
+            'is_fresher' => $this->faker->numberBetween(0,1),
             'verified' => 1,
         ];
     }

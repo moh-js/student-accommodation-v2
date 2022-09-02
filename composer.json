@@ -7,10 +7,12 @@
     "require": {
         "php": "^8.0.2",
         "brian2694/laravel-toastr": "^5.57",
+        "gr8shivam/laravel-sms-api": "^3.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",
         "laravel/helpers": "^1.5",
         "laravel/sanctum": "^2.14.1",
+        "laravolt/avatar": "^4.1",
         "laravel/tinker": "^2.7",
         "spatie/laravel-medialibrary": "^10.2",
         "spatie/laravel-permission": "^5.5",

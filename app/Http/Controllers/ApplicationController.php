@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Services\OTP;
+use App\Models\Invoice;
 use App\Models\Student;
 use App\Models\Shortlist;
 use App\Models\Application;
+use App\Rules\CustomUnique;
 use App\Models\AcademicYear;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -79,9 +81,11 @@ class ApplicationController extends Controller
                     'level' => ['required', 'string', 'max:255'],
                     'middle_name' => ['nullable', 'string', 'max:255'],
                     'phone' => ['required', 'string', 'digits:12', 'unique:students,phone'],
-                    'email' => ['required', 'email', 'unique:students,email'],
+                    'email' => ['required', 'email', new CustomUnique(Student::class, 'email')],
                     'gender' => ['required', 'integer'],
-                    'username' => ['required', 'string', 'max:15', 'min:15','unique:students,username']
+                    'username' => ['required', 'string', 'max:15', 'min:15', new CustomUnique(Student::class, 'username'), 'regex:/[^a-zA-Z0-9 .$]/']
+                ], [
+                    'regex' => 'use "/" instead of "."'
                 ]);
 
                 $first_name = $request->first_name;
@@ -100,7 +104,7 @@ class ApplicationController extends Controller
                     'gender_id' => $request->gender
                 ]);
 
-                toastr()->success('Identification completed successfully');
+                toastr()->success('Identification process completed successfully');
                 return redirect()->route('application', $student->slug);
             } else {
                 toastr()->error('Session has expired!');
@@ -131,6 +135,9 @@ class ApplicationController extends Controller
                     return back();
                 }
 
+            } else {
+                //TODO: fetch student data from sims student table by registration number and add to student table
+                $student = null;
             }
 
             if ($student) {
@@ -279,9 +286,17 @@ class ApplicationController extends Controller
 
     public function allocation(Student $student, AcademicYear $academicYear)
     {
-        return view('applications.allocation', [
-            'student' => $student
-        ]);
+        $invoice = Invoice::where([['student_id', $student->id], ['academic_year_id', $academicYear->id]])->first();
+
+        if ($invoice->status === 1) {
+            return view('applications.allocation', [
+                'student' => $student
+            ]);
+        } else {
+            toastr()->success('You have not paid the application fee.');
+            return back();
+        }
+
     }
 
     /* Dashboard Area */

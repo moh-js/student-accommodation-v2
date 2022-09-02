@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Room;
+use App\Models\Student;
+use App\Models\Shortlist;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoomController;
@@ -8,9 +10,10 @@ use App\Http\Controllers\SideController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DeadlineController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApplicationController;
-use App\Models\Shortlist;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,7 +64,7 @@ Dashboard routes
 */
 
 
-Route::middleware('auth')->group(function ()
+Route::middleware('auth:sanctum')->group(function ()
 {
     Route::prefix('invoices')->controller(InvoiceController::class)->group(function ()
     {
@@ -70,7 +73,8 @@ Route::middleware('auth')->group(function ()
     });
 
     Route::resource('users', UserController::class)->except(['show']);
-    Route::resource('groups', RoleController::class)->except(['show']);
+    Route::post('role', [RoleController::class, 'grantPermission'])->name('role.grant');
+    Route::resource('roles', RoleController::class);
     Route::resource('blocks', BlockController::class)->except(['show']);
     Route::resource('sides', SideController::class)->except(['show']);
     Route::resource('rooms', RoomController::class)->except(['show']);
@@ -83,6 +87,8 @@ Route::middleware('auth')->group(function ()
         Route::post('/{application}', 'accept')->name('application-accept');
     });
 
+    Route::resource('students', StudentController::class);
+
     Route::prefix('deadlines')->controller(DeadlineController::class)->group(function ()
     {
         Route::get('/', 'index')->name('deadline.index');
@@ -90,13 +96,15 @@ Route::middleware('auth')->group(function ()
         Route::post('/set', 'store')->name('deadline.store');
         Route::delete('/{deadline}', 'destroy')->name('deadline.delete');
     });
+    
+    Route::get('dashboard', [DashboardController::class, 'dashboard'])
+    ->name('dashboard');
 });
 
-Route::view('dashboard', 'dashboard')
-	->name('dashboard')
-	->middleware(['auth', 'verified']);
-
-
+Route::get('test', function ()
+{
+    return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
+});
 
 Route::get('get-rooms', function ()
 {

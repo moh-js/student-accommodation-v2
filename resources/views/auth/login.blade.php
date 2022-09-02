@@ -3,28 +3,26 @@
 @section('content')
 <div class="container-fluid p-0">
     <div class="row no-gutters">
-        <div class="col-lg-4">
+        <div class="col-lg-12">
             <div class="authentication-page-content p-4 d-flex align-items-center min-vh-100">
                 <div class="w-100">
                     <div class="row justify-content-center">
-                        <div class="col-lg-9">
+                        <div class="col-lg-4">
                             <div>
-                                <div class="text-center">
+                                <div class="text-center mb-4">
                                     <div class="text-center">
                                         {{-- <h1 class="logo-name"></h1> --}}
-                                        <img src="{{ asset('img/landing/logo.svg') }}" width="150">
-                                        <h3>Welcome to MAS</h3>
-                                        <p>MUST Accommodation System.
-                                        </p>
+                                        <img src="{{ asset('img/landing/logo.svg') }}" width="200">
+                                        <h3>MUST ACCOMMODATION SYSTEM</h3>
                                     </div>
 
                                 </div>
 
-                                <div class="p-2 mt-5">
+                                <div class="p-2 mt-2">
                                     <form class="form-horizontal"  method="POST" action="{{ route('login') }}">
                                         @csrf
 
-                                        <div class="form-group auth-form-group-custom mb-4">
+                                        <div class="form-group auth-form-group-custom mb-2">
                                             <i class="ri-user-2-line auti-custom-input-icon"></i>
                                             <label for="username">Username</label>
                                             <input type="text" class="form-control @error('email') is-invalid @enderror" id="username" placeholder="Enter username" value="{{ old('email') }}" name="email">
@@ -47,9 +45,15 @@
                                             <label class="custom-control-label" for="customControlInline">Remember me</label>
                                         </div>
 
-                                        <div class="mt-4 text-center">
-                                            <button class="btn btn-primary w-md waves-effect waves-light" type="submit">{{ __('Login') }}</button>
+                                        <div class="mt-2 text-center">
+                                            <button class="btn btn-block btn-primary w-md waves-effect waves-light" type="submit">{{ __('Login') }}</button>
                                         </div>
+
+                                        <div class="mt-2 text-center">
+                                            <a href="{{ route('apply') }}" class="btn btn-block btn-warning w-md waves-effect waves-light">Apply here for students</a>
+                                        </div>
+
+
 
                                         @if (Route::has('password.request'))
                                             <div class="mt-4 text-center">
@@ -69,14 +73,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-8">
-            <div class="authentication-bg">
-                {{-- <div class="bg-overlay"></div> --}}
+        {{-- <div class="col-lg-8 bg-primary">
+            <div class="authentication-b">
+                <div class="bg-overlay"></div>
                 <div class="d-flex justify-content-center pt-5">
-                    <a href="{{ route('apply') }}" class="btn btn-primary">Apply here</a>
+                    <a href="{{ route('apply') }}" class="btn btn-warning">Apply here</a>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
 @endsection
