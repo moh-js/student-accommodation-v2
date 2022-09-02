@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(GenderSeeder::class);
-        $this->call(BlockSideRoomSeeder::class);
+        // $this->call(BlockSideRoomSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
 
@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             'end_date' => now()->endOfYear()
         ]);
 
-        Student::factory()->hasApplications(1)->count(2000)->create();
+        // Student::factory()->hasApplications(1)->count(2000)->create();
 
     }
 }
