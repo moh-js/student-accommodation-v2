@@ -10,6 +10,8 @@ class Role extends ModelsRole
 {
     use SoftDeletes;
 
+    public $guard_name = 'web';
+
     public function getProperNameAttribute()
     {
         return title_case(str_replace('-', ' ', $this->name));

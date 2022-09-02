@@ -24,8 +24,8 @@
 
                                         <div class="form-group auth-form-group-custom mb-2">
                                             <i class="ri-user-2-line auti-custom-input-icon"></i>
-                                            <label for="username">Username</label>
-                                            <input type="text" class="form-control @error('email') is-invalid @enderror" id="username" placeholder="Enter username" value="{{ old('email') }}" name="email">
+                                            <label for="email">E-Mail Address</label>
+                                            <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Enter email" value="{{ old('email') }}" name="email">
 
                                             @error('email')
                                             <div class="invalid-feedback">
@@ -73,14 +73,6 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="col-lg-8 bg-primary">
-            <div class="authentication-b">
-                <div class="bg-overlay"></div>
-                <div class="d-flex justify-content-center pt-5">
-                    <a href="{{ route('apply') }}" class="btn btn-warning">Apply here</a>
-                </div>
-            </div>
-        </div> --}}
     </div>
 </div>
 @endsection
