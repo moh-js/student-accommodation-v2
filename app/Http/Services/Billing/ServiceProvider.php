@@ -3,7 +3,7 @@ namespace App\Http\Services\Billing;
 
 use Illuminate\Support\Facades\Http;
 
-class BillingServiceProvider 
+class ServiceProvider 
 {
     protected $customerInvoiceURL = '';
     protected $nonCustomerInvouiceURL = '';
