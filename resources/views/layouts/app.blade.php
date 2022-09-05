@@ -194,8 +194,10 @@
                 <a href="{{ route('dashboard') }}"><i class="mdi mdi-home-variant h2 text-white"></i></a>
             </div>
             @endif
-            <div>
-                @yield('content')
+            <div class="mb-5">
+                <div class="mb-5">
+                    @yield('content')
+                </div>
             </div>
 
             <!-- JAVASCRIPT -->

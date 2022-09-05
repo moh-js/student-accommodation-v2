@@ -9,16 +9,20 @@ use Illuminate\Support\Facades\DB;
 class CustomUnique implements Rule
 {
     private $model;
+    private $id;
+    private $id_field;
     private $column;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($model, $column)
+    public function __construct($model, $column, $id = null, $id_field = null)
     {
         $this->model = $model;
         $this->column = $column;
+        $this->id = $id;
+        $this->id_field = $id_field;
     }
 
     /**
@@ -30,7 +34,13 @@ class CustomUnique implements Rule
      */
     public function passes($attribute, $value)
     {
-        return $this->model::query()->where([[$this->column, $value], ['deleted_at', null]])->count() === 0;
+        return $this->model::query()
+        ->when($this->id, function ($query)
+        {
+            $query->where($this->id_field, '!=', $this->id);
+        })
+        ->where([[$this->column, $value], ['deleted_at', null]])
+        ->count() === 0;
     }
 
     /**

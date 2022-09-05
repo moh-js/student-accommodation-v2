@@ -101,10 +101,10 @@ Route::middleware('auth:sanctum')->group(function ()
     ->name('dashboard');
 });
 
-Route::get('test', function ()
-{
-    return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
-});
+// Route::get('test', function ()
+// {
+//     return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
+// });
 
 Route::get('get-rooms', function ()
 {

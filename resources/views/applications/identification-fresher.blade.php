@@ -13,6 +13,14 @@
                     <form action="{{ route('identify') }}" method="post">
                         @csrf
 
+                        <div class="alert alert-danger" role="alert">
+                            <strong><u>NOTE:</u></strong>
+                            <ol>
+                                <li>All foreigner and disabled students must have a supporting documents for proof.</li>
+                                <li>Any misinformation provided below will lead to your application being cancelled and furthermore we will ban you from applying for In Campus Accommodation.</li>
+                            </ol>
+                        </div>
+
                         <div class="row justify-content-center">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -77,7 +85,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="">Level</label>
                                     <select class="form-control @error('level') is-invalid @enderror" name="level">
@@ -88,6 +96,18 @@
                                         <option value="fourth year">Fourth Year</option>
                                     </select>
                                     @error('level')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="">Date of Birth</label>
+                                    <input type="date" class="form-control @error('dob') is-invalid @enderror" value="{{ old('dob') }}" name="dob">
+                                    @error('dob')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -130,6 +150,31 @@
                                         </div>
                                     @endforeach
                                     @error('gender')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Do you have any disability?</label>
+                                    <select class="form-control" name="disability" id="disability">
+                                        <option value="{{ 0 }}">No</option>
+                                        <option value="{{ 1 }}">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Are you a foreigner student?</label>
+                                    <select class="form-control" name="foreigner" id="foreigner">
+                                        <option value="{{ 0 }}">No</option>
+                                        <option value="{{ 1 }}">Yes</option>
+                                    </select>
+                                    @error('phone')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>

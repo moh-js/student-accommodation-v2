@@ -50,7 +50,7 @@
                                         </div>
 
                                         <div class="mt-2 text-center">
-                                            <a href="{{ route('apply') }}" class="btn btn-block btn-warning w-md waves-effect waves-light">Apply here for students</a>
+                                            <a href="{{ route('apply') }}" class="btn btn-block btn-warning w-md waves-effect waves-light">Apply Here for Students</a>
                                         </div>
 
 

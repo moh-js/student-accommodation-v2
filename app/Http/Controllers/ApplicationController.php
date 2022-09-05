@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Services\OTP;
+use App\Models\Gender;
 use App\Models\Invoice;
 use App\Models\Student;
 use App\Models\Shortlist;
@@ -11,6 +12,7 @@ use App\Models\Application;
 use App\Rules\CustomUnique;
 use App\Models\AcademicYear;
 use Illuminate\Http\Request;
+use App\Models\StudentSimsDB;
 use Illuminate\Support\Facades\Http;
 use App\Jobs\Shortlist as JobsShortlist;
 use Illuminate\Database\Eloquent\Builder;
@@ -56,8 +58,10 @@ class ApplicationController extends Controller
     {
         if (session()->has('student_type')) { // check student type session if contains data
             if (session('student_type') == 'fresher') {
+
+                // In the future use try {} to catch the exception
                 $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
-                // return ($programmes);
+
                 return view('applications.identification-fresher', [
                     'programmes' => collect($programmes)->sortBy('name')
                 ]);
@@ -77,9 +81,10 @@ class ApplicationController extends Controller
                 $request->validate([
                     'last_name' => ['required', 'string', 'max:255'],
                     'first_name' => ['required', 'string', 'max:255'],
-                    'programme' => ['required', 'string', 'max:255'],
-                    'level' => ['required', 'string', 'max:255'],
                     'middle_name' => ['nullable', 'string', 'max:255'],
+                    'programme' => ['required', 'string', 'max:255'],
+                    'dob' => ['required', 'date'],
+                    'level' => ['required', 'string', 'max:255'],
                     'phone' => ['required', 'string', 'digits:12', 'unique:students,phone'],
                     'email' => ['required', 'email', new CustomUnique(Student::class, 'email')],
                     'gender' => ['required', 'integer'],
@@ -100,11 +105,22 @@ class ApplicationController extends Controller
                     'phone' => $request->phone,
                     'programme' => $request->programme,
                     'level' => $request->level,
+                    'dob' => $request->dob,
                     'email' => $request->email,
                     'gender_id' => $request->gender
                 ]);
 
-                toastr()->success('Identification process completed successfully');
+                if ($request->foreigner) {
+                    $student->student_type = 'foreigner';
+                } 
+
+                if ($request->disabled) {
+                    $student->student_type = 'disabled';
+                }
+
+                $student->save();
+
+                toastr()->success('Registration process completed successfully');
                 return redirect()->route('application', $student->slug);
             } else {
                 toastr()->error('Session has expired!');
@@ -136,8 +152,24 @@ class ApplicationController extends Controller
                 }
 
             } else {
-                //TODO: fetch student data from sims student table by registration number and add to student table
-                $student = null;
+                $student = StudentSimsDB::where('RegNo', $request->id)->first();
+                $student = Student::firstOrCreate([
+                    'username' => $student->RegNo,
+                ], [
+                    'student_type' => session('student_type'),
+                    'name' => Student::generateFullName($student->FirstName, $student->LastName, $student->MiddleName),
+                    'phone' => $student->Mobile,
+                    'level' => $request->level,
+                    'sponsor' => strtolower($student->sponsor->name),
+                    'email' => $student->Email,
+                    'edit' => 1,
+                    'programme' => title_case($student->programme->Name),
+                    'dob' => $student->dob,
+                    'gender_id' => Gender::where('short_name', $student->Gender)->first()->id,
+                    'verified' => 1,
+                    'is_fresher' => 0
+                ]);
+                
             }
 
             if ($student) {
@@ -194,25 +226,49 @@ class ApplicationController extends Controller
 
         $studentKeyNumber = $studentShortlist->whereIn('student_id', $student->id)->keys()->last();
 
+        // In the future use try {} to catch the exception
+        $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
+
         return view('applications.application', [
             'deadline' => $student->studentDeadline(),
             'student' => $student,
             'roomsCount' => $roomsCount,
+            'programmes' => collect($programmes)->sortBy('name'),
             'studentKeyNumber' => $studentKeyNumber,
             'shortlist' => $student->shortlist,
             'shortlisted' => $student->isShortlisted(),
         ]);
     }
 
-    public function apply(Student $student)
+    public function apply(Student $student, Request $request)
     {
         if ($student) {
+            if ($student->edit) {
+                $data = $request->validate([
+                    'programme' => ['required', 'string', 'max:255'],
+                    'level' => ['required', 'string', 'max:255'],
+                    'award' => ['required', 'string', 'max:255'],
+                    'phone' => ['required', 'string', 'digits:12', "unique:students,phone,$student->id,id"],
+                    'email' => ['required', 'email', new CustomUnique(Student::class,'email',$student->id,'id')],
+                ]);
+
+                if ($request->foreigner) {
+                    $student->student_type = 'foreigner';
+                } 
+
+                if ($request->disabled) {
+                    $student->student_type = 'disabled';
+                }
+                
+                $student->update($data);
+            }
+
             if (!$student->currentApplication()) {
                 Application::firstOrCreate([
                     'academic_year_id' => AcademicYear::current()->id,
                     'student_id' => $student->id
                 ], [
-                    'application_id' => rand(11299,1212121),
+                    'application_id' => now()->format('y').$student->id.rand(11299,1212121),
                 ]);
 
                 toastr()->success('application sent successfully');

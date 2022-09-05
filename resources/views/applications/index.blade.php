@@ -6,15 +6,15 @@
 
 <div class="row justify-content-center no-gutters mt-5">
     <div class="col-md-8">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center no-gutters">
             <div class="col-md-6 nav">
                 <a href="javascript:void(0)" onclick="$('#fresher').submit()" class="navlink">
                     <div class="icon-in-circle">
-                        <i class="ri-user-received-line"></i>
+                        <i class="ri-user-received-line text-primary"></i>
                     </div>
                     <div>
                         <h5 class="navlink__title">Fresher</h5>
-                        <div class="navlink__descr">New student who is selected to study at our campus</div>
+                        <div class="navlink__descr">New students who are selected to join at our main campus</div>
                     </div>
                 </a>
                 <form hidden id="fresher" action="{{ route('student-type') }}" method="post">
@@ -25,7 +25,7 @@
             <div class="col-md-6 nav">
                 <a href="javascript:void(0)" onclick="$('#continuous').submit()" class="navlink">
                     <div class="icon-in-circle">
-                        <i class=" ri-user-follow-line"></i>
+                        <i class=" ri-user-follow-line text-primary"></i>
                     </div>
                     <div>
                         <h5 class="navlink__title">Continuous</h5>
@@ -40,7 +40,7 @@
             <div class="col-md-6 nav">
                 <a href="javascript:void(0)" onclick="$('#status').submit()" class="navlink">
                     <div class="icon-in-circle">
-                        <i class=" ri-share-forward-2-line"></i>
+                        <i class=" ri-share-forward-2-line text-primary"></i>
                     </div>
                     <div>
                         <h5 class="navlink__title">Status</h5>
