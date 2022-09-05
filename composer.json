@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
+        "php": "^7.4|^8.0.2",
         "brian2694/laravel-toastr": "^5.57",
         "gr8shivam/laravel-sms-api": "^3.0",
         "guzzlehttp/guzzle": "^7.2",
