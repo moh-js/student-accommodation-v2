@@ -14,6 +14,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DeadlineController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\BillingController;
 
 /*
 |--------------------------------------------------------------------------

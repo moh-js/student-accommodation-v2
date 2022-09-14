@@ -1,9 +1,10 @@
 <?php
-namespace App\Http\Services\Billing;
+
+namespace App\Http\Services;
 
 use Illuminate\Support\Facades\Http;
 
-class ServiceProvider 
+class BillingServiceProvider
 {
     protected $customerInvoiceURL = '';
     protected $nonCustomerInvouiceURL = '';
@@ -11,7 +12,7 @@ class ServiceProvider
     protected $currency;
     protected $amount;
     protected $description;
-    
+
     private $apiCode;
     private $apiKey;
 
@@ -64,8 +65,6 @@ class ServiceProvider
             'token' => $this->apiKey,
         ];
 
-        $response = Http::post($this->nonCustomerInvouiceURL, ['auth' => $auth, 'data' => $data]);   
+        $response = Http::post($this->nonCustomerInvouiceURL, ['auth' => $auth, 'data' => $data]);
     }
-
-
 }

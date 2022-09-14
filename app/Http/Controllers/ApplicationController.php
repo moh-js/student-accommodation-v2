@@ -16,13 +16,16 @@ use App\Models\StudentSimsDB;
 use Illuminate\Support\Facades\Http;
 use App\Jobs\Shortlist as JobsShortlist;
 use Illuminate\Database\Eloquent\Builder;
+use GuzzleHttp\Exception\ConnectException;
+use App\Http\Services\BillingServiceProvider;
+use Illuminate\Http\Client\ConnectionException;
 
 class ApplicationController extends Controller
 {
     public function __construct(Request $request)
     {
         $this->middleware('deadline.check')->only(['identification', 'apply']);
-        $this->middleware('eligibility.check:'.$request->student)->only(['createInvoice', 'sendOTP', 'payment']);
+        $this->middleware('eligibility.check:' . $request->student)->only(['createInvoice', 'sendOTP', 'payment']);
     }
 
     public function index()
@@ -60,7 +63,12 @@ class ApplicationController extends Controller
             if (session('student_type') == 'fresher') {
 
                 // In the future use try {} to catch the exception
-                $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
+                try {
+                    $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
+                } catch (ConnectionException $e) {
+                    toastr()->error('Could not fetch programmes refresh the page', 'Host resolve failure');
+                    $programmes = [];
+                }
 
                 return view('applications.identification-fresher', [
                     'programmes' => collect($programmes)->sortBy('name')
@@ -112,7 +120,7 @@ class ApplicationController extends Controller
 
                 if ($request->foreigner) {
                     $student->student_type = 'foreigner';
-                } 
+                }
 
                 if ($request->disabled) {
                     $student->student_type = 'disabled';
@@ -135,14 +143,13 @@ class ApplicationController extends Controller
 
 
             $student = Student::where([['username', request('id')], ['student_type', 'continuous']])
-            ->orWhereHas('applications', function (Builder $query)
-            {
-                $query->where([['application_id', request()->id], ['academic_year_id', AcademicYear::current()->id]]);
-            })
-            ->first();
+                ->orWhereHas('applications', function (Builder $query) {
+                    $query->where([['application_id', request()->id], ['academic_year_id', AcademicYear::current()->id]]);
+                })
+                ->first();
 
             if ($student) {
-                if (!($student->currentApplication()??false)) {
+                if (!($student->currentApplication() ?? false)) {
                     $student->update([ // update level
                         'level' => request()->input('level'),
                     ]);
@@ -150,7 +157,6 @@ class ApplicationController extends Controller
                     toastr()->error('Application already sent check status instead');
                     return back();
                 }
-
             } else {
                 $student = StudentSimsDB::where('RegNo', $request->id)->first();
                 $student = Student::firstOrCreate([
@@ -169,7 +175,6 @@ class ApplicationController extends Controller
                     'verified' => 1,
                     'is_fresher' => 0
                 ]);
-                
             }
 
             if ($student) {
@@ -179,7 +184,6 @@ class ApplicationController extends Controller
                 toastr()->error("We couldn't find your registration number.");
                 return back();
             }
-
         }
     }
 
@@ -187,7 +191,9 @@ class ApplicationController extends Controller
     {
         $student = $this->identifyStudentApplication(request());
         if ($student) {
-            toastr()->success('Welcome back '. $student->name);
+            toastr()->success('Welcome back ' . $student->name);
+
+            session(['student_type' => $student->student_type]);
 
             if ($student->currentInvoice()) {
                 return redirect()->route('payment', $student->slug);
@@ -207,11 +213,10 @@ class ApplicationController extends Controller
         ]);
 
         return Student::where([['username', $request->id]])
-        ->orWhereHas('applications', function (Builder $query)
-        {
-            $query->where([['application_id', request()->id], ['academic_year_id', AcademicYear::current()->id]]);
-        })
-        ->first();
+            ->orWhereHas('applications', function (Builder $query) {
+                $query->where([['application_id', request()->id], ['academic_year_id', AcademicYear::current()->id]]);
+            })
+            ->first();
     }
 
     public function application(Student $student)
@@ -227,7 +232,12 @@ class ApplicationController extends Controller
         $studentKeyNumber = $studentShortlist->whereIn('student_id', $student->id)->keys()->last();
 
         // In the future use try {} to catch the exception
-        $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
+        try {
+            $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
+        } catch (ConnectException $e) {
+            toastr()->error('Could not fetch programmes refresh the page', 'Host resolve failure');
+            $programmes = [];
+        }
 
         return view('applications.application', [
             'deadline' => $student->studentDeadline(),
@@ -249,17 +259,17 @@ class ApplicationController extends Controller
                     'level' => ['required', 'string', 'max:255'],
                     'award' => ['required', 'string', 'max:255'],
                     'phone' => ['required', 'string', 'digits:12', "unique:students,phone,$student->id,id"],
-                    'email' => ['required', 'email', new CustomUnique(Student::class,'email',$student->id,'id')],
+                    'email' => ['required', 'email', new CustomUnique(Student::class, 'email', $student->id, 'id')],
                 ]);
 
                 if ($request->foreigner) {
                     $student->student_type = 'foreigner';
-                } 
+                }
 
                 if ($request->disabled) {
                     $student->student_type = 'disabled';
                 }
-                
+
                 $student->update($data);
             }
 
@@ -268,17 +278,16 @@ class ApplicationController extends Controller
                     'academic_year_id' => AcademicYear::current()->id,
                     'student_id' => $student->id
                 ], [
-                    'application_id' => now()->format('y').$student->id.rand(11299,1212121),
+                    'application_id' => now()->format('y') . $student->id . rand(11299, 1212121),
                 ]);
 
                 toastr()->success('application sent successfully');
             } else {
-                toastr()->success('Application already sent check the status instead '. $student->name);
-                return redirect()->route('identification');
+                toastr()->success('Application already sent check the status instead ' . $student->name);
+                return redirect()->back();
             }
 
             return redirect()->back();
-
         } else {
             return abort(404);
         }
@@ -301,7 +310,7 @@ class ApplicationController extends Controller
             'otp' => ['required', 'string'],
         ]);
 
-        if (! $request->hasValidSignature()) { // abort if the url is expired
+        if (!$request->hasValidSignature()) { // abort if the url is expired
             toastr()->error('URL has expired! URL expire after 1 minute');
             return back();
         }
@@ -313,13 +322,34 @@ class ApplicationController extends Controller
             $invoice = $student->invoices()->firstOrCreate([
                 'academic_year_id' => AcademicYear::current()->id
             ], [
-                'reference' => rand(18821,12128121)
+                'reference' => rand(18821, 12128121)
             ]);
 
-            // TODO
             // call billing api for invoice creation
+            $billingService = new BillingServiceProvider('141501070144', 'TZS', 107100, 'accommodation fee');
 
-            toastr()->success('Invoice has been created successfully');
+            try {
+                if ($student->is_fresher) {
+                    $response = $billingService->createNonCustomerInvoice(
+                        $student->username,
+                        $invoice->reference,
+                        $student->name,
+                        $student->phone,
+                        $student->email
+                    );
+                } else {
+                    $response = $billingService->createCustomerInvoice(
+                        $student->username,
+                        $invoice->reference,
+                    );
+                }
+
+                toastr()->success('Invoice has been created successfully');
+            
+            } catch (\Throwable $e) {
+                toastr()->error($e->message, 'Something went wrong!');
+            }
+
             return back();
         } else {
             toastr()->error('OTP is invalid');
@@ -337,7 +367,6 @@ class ApplicationController extends Controller
             toastr()->success('OTP sent successfully');
             return back();
         }
-
     }
 
     public function allocation(Student $student, AcademicYear $academicYear)
@@ -352,7 +381,6 @@ class ApplicationController extends Controller
             toastr()->success('You have not paid the application fee.');
             return back();
         }
-
     }
 
     /* Dashboard Area */
