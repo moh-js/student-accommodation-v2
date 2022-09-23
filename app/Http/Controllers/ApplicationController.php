@@ -11,6 +11,7 @@ use App\Models\Shortlist;
 use App\Models\Application;
 use App\Rules\CustomUnique;
 use App\Models\AcademicYear;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\StudentSimsDB;
 use Illuminate\Support\Facades\Http;
@@ -159,6 +160,9 @@ class ApplicationController extends Controller
                 }
             } else {
                 $student = StudentSimsDB::where('RegNo', $request->id)->first();
+
+                $dobChecker = checkdate(Carbon::parse($student->dob)->format('m'), Carbon::parse($student->dob)->format('d'), Carbon::parse($student->dob)->format('Y'));
+
                 $student = Student::firstOrCreate([
                     'username' => $student->RegNo,
                 ], [
@@ -170,7 +174,7 @@ class ApplicationController extends Controller
                     'email' => $student->Email,
                     'edit' => 1,
                     'programme' => title_case($student->programme->Name),
-                    'dob' => $student->dob,
+                    'dob' => $dobChecker?Carbon::parse($student->dob)->toDate():null,
                     'gender_id' => Gender::where('short_name', $student->Gender)->first()->id,
                     'verified' => 1,
                     'is_fresher' => 0
