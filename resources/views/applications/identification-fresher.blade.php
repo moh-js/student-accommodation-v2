@@ -74,7 +74,7 @@
                                     <select class="form-control @error('programme') is-invalid @enderror" type="text" name="programme">
                                         <option value="{{ null }}">Choose the your programme</option>
                                         @foreach ($programmes as $programme)
-                                            <option value="{{ $programme['name'] }}">{{ $programme['name'] }}</option>
+                                            <option {{ old('programme') == $programme['name']? 'selected':'' }} value="{{ $programme['name'] }}">{{ $programme['name'] }}</option>
                                         @endforeach
                                     </select>
                                     @error('programme')
@@ -90,13 +90,13 @@
                                     <label for="">Level</label>
                                     <select class="form-control @error('level') is-invalid @enderror" name="level">
                                         <option value="{{ null }}">Choose the your level</option>
-                                        <option value="first year">First Year</option>
-                                        <option value="second year">Second Year</option>
-                                        <option value="third year">Third Year</option>
-                                        <option value="fourth year">Fourth Year</option>
+                                        <option {{ old('level') == 'first year'? 'selected':'' }} value="first year">First Year</option>
+                                        <option {{ old('level') == 'second year'? 'selected':'' }} value="second year">Second Year</option>
+                                        <option {{ old('level') == 'third year'? 'selected':'' }} value="third year">Third Year</option>
+                                        <option {{ old('level') == 'fourth year'? 'selected':'' }} value="fourth year">Fourth Year</option>
                                     </select>
                                     @error('level')
-                                        <div class="invalid-feedback">
+                                        <div class="text-danger">
                                             {{ $message }}
                                         </div>
                                     @enderror

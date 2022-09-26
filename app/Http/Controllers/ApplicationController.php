@@ -161,24 +161,29 @@ class ApplicationController extends Controller
             } else {
                 $student = StudentSimsDB::where('RegNo', $request->id)->first();
 
-                $dobChecker = checkdate(Carbon::parse($student->dob)->format('m'), Carbon::parse($student->dob)->format('d'), Carbon::parse($student->dob)->format('Y'));
+                if (isset($student->dob)) {
+                    $dobChecker = checkdate(Carbon::parse($student->dob)->format('m'), Carbon::parse($student->dob)->format('d'), Carbon::parse($student->dob)->format('Y'));
 
-                $student = Student::firstOrCreate([
-                    'username' => $student->RegNo,
-                ], [
-                    'student_type' => session('student_type'),
-                    'name' => Student::generateFullName($student->FirstName, $student->LastName, $student->MiddleName),
-                    'phone' => $student->Mobile,
-                    'level' => $request->level,
-                    'sponsor' => strtolower($student->sponsor->name),
-                    'email' => $student->Email,
-                    'edit' => 1,
-                    'programme' => title_case($student->programme->Name),
-                    'dob' => $dobChecker?Carbon::parse($student->dob)->toDate():null,
-                    'gender_id' => Gender::where('short_name', $student->Gender)->first()->id,
-                    'verified' => 1,
-                    'is_fresher' => 0
-                ]);
+                    $student = Student::firstOrCreate([
+                        'username' => $student->RegNo,
+                    ], [
+                        'student_type' => session('student_type'),
+                        'name' => Student::generateFullName($student->FirstName, $student->LastName, $student->MiddleName),
+                        'phone' => $student->Mobile??rand(255623000000,255623999999),
+                        'level' => $request->level,
+                        'sponsor' => strtolower($student->sponsor->name),
+                        'email' => $student->Email??$student->FirstName.'@'.$student->LastName.'.sample',
+                        'edit' => 1,
+                        'programme' => title_case($student->programme->Name),
+                        'dob' => $dobChecker?Carbon::parse($student->dob)->toDate():null,
+                        'gender_id' => Gender::where('short_name', $student->Gender)->first()->id,
+                        'verified' => 1,
+                        'is_fresher' => 0
+                    ]);
+                } else {
+                    $student = false;
+                }
+
             }
 
             if ($student) {
@@ -186,7 +191,7 @@ class ApplicationController extends Controller
                 return redirect()->route('application', $student->slug);
             } else {
                 toastr()->error("We couldn't find your registration number.");
-                return back();
+                return back()->withInput();
             }
         }
     }
@@ -206,7 +211,7 @@ class ApplicationController extends Controller
             return redirect()->route('application', $student->slug);
         } else {
             toastr()->error('Incorrect username or application id');
-            return back();
+            return back()->withInput();
         }
     }
 
@@ -233,9 +238,9 @@ class ApplicationController extends Controller
             $studentShortlist = Shortlist::femaleShortlist()->with('student')->get();
         }
 
-        $studentKeyNumber = $studentShortlist->whereIn('student_id', $student->id)->keys()->last();
+        $specificShortlist = $studentShortlist;
+        $studentKeyNumber = $studentShortlist->whereIn('student_id', $student->id)->keys()->first()+1;
 
-        // In the future use try {} to catch the exception
         try {
             $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
         } catch (ConnectException $e) {
@@ -389,12 +394,21 @@ class ApplicationController extends Controller
 
     /* Dashboard Area */
 
-    public function applicationLists()
+    public function applicationLists(Request $request)
     {
         $this->authorize('application-view');
 
+        if ($request->has('search')) {
+            $applications = Application::currentYear()->whereHas('student', function (Builder $query)
+            {
+                $query->where('username', 'like', '%'.request('search').'%');
+            })->paginate(50);
+        } else {
+            $applications = Application::currentYear()->paginate(50);
+        }
+
         return view('applications.application-list', [
-            'applications' => Application::currentYear()->get(),
+            'applications' => $applications,
         ]);
     }
 
@@ -430,5 +444,33 @@ class ApplicationController extends Controller
 
         toastr()->success('Process has started successfully');
         return redirect()->route('applications-list');
+    }
+
+    public function shortlistPage(Request $request)
+    {
+        $this->authorize('shortlist-view');
+
+        if ($request->has('search')) {
+            $shortlists = Shortlist::whereHas('student', function (Builder $query)
+            {
+                $query->where('username', 'like', '%'.request('search').'%');
+            })->paginate(50);
+        } else {
+            $shortlists = Shortlist::paginate(50);
+        }
+
+        return view('applications.shortlist', [
+            'shortlists' => $shortlists,
+        ]);
+    }
+
+    public function removeShortlisted(Request $request, Shortlist $shortlist)
+    {
+        $this->authorize('shortlist-delete');
+
+        $shortlist->delete();
+
+        toastr()->success('Selection has been declined successfully');
+        return redirect()->back();
     }
 }

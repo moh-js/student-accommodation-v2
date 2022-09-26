@@ -27,7 +27,15 @@
         ], [
             'title' => 'Students', 'url' => route('students.index'), 'permission' => request()->user()->hasAnyPermission('student-view'), 'icon' => 'ri-user-2-line', 'childrens' => collect(),
         ], [
-            'title' => 'Applications', 'url' => route('applications-list'), 'permission' => request()->user()->hasAnyPermission('application-view'), 'icon' => 'ri-survey-line', 'childrens' => collect(),
+            'title' => 'Applications', 'url' => 'javascript:void(0)', 'permission' => request()->user()->hasAnyPermission('application-view'), 'icon' => 'ri-survey-line', 'childrens' => collect([
+                [
+                    'title' => 'List', 'url' => route('applications-list'), 'permission' => request()->user()->hasAnyPermission('application-view')
+
+                ], [
+                    'title' => 'Shortlist', 'url' => route('shortlist'), 'permission' => request()->user()->hasAnyPermission('shortlist-view')
+
+                ]
+            ]),
         ], [
             'title' => 'Payment', 'url' => route('invoices.index', App\Models\AcademicYear::current()->slug), 'permission' => request()->user()->hasAnyPermission('invoice-view'), 'icon' => ' ri-bank-card-2-line', 'childrens' => collect(),
         ], [

@@ -36,7 +36,12 @@
 
                     @if ($student->currentApplication())
                         @if (($deadline->end_date->addDays(3)) < now())
-                            @if ($shortlisted && ($studentKeyNumber <= $roomsCount))
+                            @if($shortlist->is_published)
+                                <div class="alert alert-success" role="alert">
+                                    <strong>Be patient</strong>
+                                    <p>The result for you has not been published yet, kindly wait and continue to visit this page. We will release the result soon.</p>
+                                </div>
+                            @elseif ($shortlisted && ($studentKeyNumber <= $roomsCount))
                                 <div class="alert alert-success" role="alert">
                                     <strong>Congrats</strong>
                                     <p>You have been selected for in-campus accommodation. complete the payment to secure your place on time and avoid any inconvinience</p>
@@ -49,6 +54,7 @@
                                     <p>There is no vacancy available that we can allocate to you right now. but stay close we will notify you when there is vancancy available for you</p>
                                 </div>
                             @endif
+                            
                         @else
                             <div class="alert alert-success" role="alert">
                                 <strong>Your application is sent successfull</strong>

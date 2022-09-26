@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
             'end_date' => now()->endOfYear()
         ]);
 
-        // Student::factory()->hasApplications(1)->count(2000)->create();
 
     }
 }

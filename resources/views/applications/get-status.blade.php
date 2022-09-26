@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <span class="card-title" style="font-size: 18px;"><strong>Check Application</strong></span>
                     <hr>
-                    <p>Enter your registration number or application ID to check your application</p>
+                    <p>Enter your registration number <span class="text-danger">(form 4 index number for fresher students)</span>  or application ID to check your application</p>
 
 
                     <form action="{{ route('resume') }}" method="post">
@@ -31,11 +31,11 @@
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="">Level</label>
+                                    <label for="">Student Type</label>
                                     <select class="form-control @error('student_type') is-invalid @enderror" name="student_type">
                                         <option value="{{ null }}">Choose type</option>
-                                        <option value="fresher">Fresher</option>
-                                        <option value="continuous">Continuous</option>
+                                        <option {{ old('student_type') == 'fresher'? 'selected':'' }} value="fresher">Fresher</option>
+                                        <option {{ old('student_type') == 'continuous'? 'selected':'' }} value="continuous">Continuous</option>
                                     </select>
                                     @error('student_type')
                                         <div class="text-danger">

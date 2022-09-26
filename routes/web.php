@@ -83,6 +83,8 @@ Route::middleware('auth:sanctum')->group(function ()
     Route::prefix('applications')->controller(ApplicationController::class)->group(function ()
     {
         Route::get('/', 'applicationLists')->name('applications-list');
+        Route::get('/shortlist', 'shortlistPage')->name('shortlist');
+        Route::delete('/shortlist/{shortlist}', 'removeShortlisted')->name('remove.shortlisted');
         Route::post('/student/shortlist', 'shortlist')->name('applications.shortlist');
         Route::delete('/{application}', 'decline')->name('application-decline');
         Route::post('/{application}', 'accept')->name('application-accept');

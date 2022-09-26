@@ -7,6 +7,16 @@
 @section('content')
 <div class="row">
     <div class="col-12">
+        <div class="float-left">
+            <form class="mb-4" action="{{ route('applications-list') }}" method="get">
+                <div class="form-group">
+                    <input type="text" value="{{ old('search', request()->search) }}" class="form-control" placeholder="Enter username" name="search">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+
         <div class="float-right">
             <form class="mb-4" action="{{ route('applications.shortlist') }}" method="post">
                 @csrf
@@ -21,9 +31,10 @@
             <div class="card-body">
 
 
-                <table id="datatable" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                <table id="" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th>Full Name</th>
                         <th>Application ID</th>
                         <th>Username</th>
@@ -36,8 +47,9 @@
 
 
                     <tbody>
-                        @foreach ($applications as $application)
+                        @foreach ($applications as $key => $application)
                             <tr>
+                                <th>{{ $key + $applications->firstItem() }}</th>
                                 <td>{{ $application->student->name }}</td>
                                 <td>{{ $application->application_id }}</td>
                                 <td>{{ $application->student->username }}</td>
@@ -52,9 +64,9 @@
                                 </td>
                                 <td class="text-center">
                                     @if ($application->red_flagged)
-                                        <a href="javascript:void(0)" onclick="$('#{{ $application->application_id }}').submit()" class="btn btn-info waves-effect waves-light btn-sm"><i class="ri-checkbox-multiple-line"></i></a>
+                                        <a href="javascript:void(0)" onclick="restoreApplication({{ $application->application_id }})" class="btn btn-info waves-effect waves-light btn-sm"><i class="ri-checkbox-multiple-line"></i></a>
                                     @else
-                                        <a href="javascript:void(0)" onclick="$('#{{ $application->application_id }}').submit()" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-2-line"></i></a>
+                                        <a href="javascript:void(0)" onclick="revokeApplication({{ $application->application_id }})" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-2-line"></i></a>
                                     @endif
                                     <form id="{{ $application->application_id }}" action="{{ route($application->red_flagged?'application-accept':'application-decline', $application->application_id) }}" method="post">@csrf @if (!$application->red_flagged) @method('DELETE') @endif </form>
                                 </td>
@@ -62,7 +74,10 @@
                         @endforeach
                     </tbody>
                 </table>
-
+                
+                <div>
+                    {{ $applications->appends(request()->input())->links('pagination::bootstrap-5') }}
+                </div>
             </div>
         </div>
     </div> <!-- end col -->
@@ -80,7 +95,16 @@
     <script src="{{ asset('assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
 
     <script>
-        // $('#datatable').DataTable();
+        function revokeApplication(id) {
+            if (confirm('Are you sure? Delete Application')) {
+                $('#'+id).submit()
+            }
+        }
+        function restoreApplication(id) {
+            if (confirm('Are you sure? Restore Application')) {
+                $('#'+id).submit()
+            }
+        }
     </script>
 
     <!-- Datatable init js -->

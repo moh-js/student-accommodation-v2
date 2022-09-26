@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Student;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class StudentSeeder extends Seeder
 {
@@ -14,6 +15,6 @@ class StudentSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Student::factory()->hasApplications(1)->count(2000)->create();
     }
 }
