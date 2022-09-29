@@ -473,4 +473,13 @@ class ApplicationController extends Controller
         toastr()->success('Selection has been declined successfully');
         return redirect()->back();
     }
+
+    // public function editApplication(Student $student)
+    // {
+    //     $this->authorize('application-update');
+        
+    //     return view('applications.application-info-edit', [
+    //         'student' => $student
+    //     ]);
+    // }
 }

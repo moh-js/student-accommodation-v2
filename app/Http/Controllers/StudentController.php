@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Rules\CustomUnique;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Database\Eloquent\Builder;
 
 class StudentController extends Controller
 {
@@ -13,12 +15,18 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('student-view');
 
+        if ($request->has('search')) {
+            $students = Student::where('username', 'like', '%'.request('search').'%')->paginate(50);
+        } else {
+            $students = Student::paginate(50);
+        }
+
         return view('students.index', [
-            'students' => Student::paginate(20)
+            'students' => $students
         ]);
     }
 
@@ -29,6 +37,8 @@ class StudentController extends Controller
      */
     public function create()
     {
+        $this->authorize('student-add');
+
         $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
         // return ($programmes);
         return view('students.add', [
@@ -44,6 +54,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('student-add');
         //
     }
 
@@ -66,7 +77,14 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        $this->authorize('student-update');
+
+        $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
+
+        return view('students.edit', [
+            'student' => $student,
+            'programmes' => collect($programmes)->sortBy('name')
+        ]);
     }
 
     /**
@@ -78,7 +96,23 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        $this->authorize('student-update');
+        
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:200'],
+            'programme' => ['required', 'string', 'max:255'],
+            'dob' => ['required', 'date'],
+            'level' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'digits:12', new CustomUnique(Student::class, 'phone',$student->id,'id')],
+            'email' => ['required', 'email', new CustomUnique(Student::class, 'email',$student->id,'id')],
+            'gender_id' => ['required', 'integer'],
+            'username' => ['required', 'string', new CustomUnique(Student::class, 'username',$student->id,'id')]
+        ]);
+
+        $student->update($data);
+        toastr()->success('Student info updated successfully');
+        
+        return redirect()->route('students.index');
     }
 
     /**

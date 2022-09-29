@@ -7,11 +7,22 @@
 @section('content')
 <div class="row">
     <div class="col-12">
+        <div class="float-left">
+            <form class="mb-4" action="{{ route('students.index') }}" method="get">
+                <div class="form-group">
+                    <input type="text" value="{{ old('search', request()->search) }}" class="form-control" placeholder="Enter username" name="search">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
 
         <div class="text-right mb-2">
             <a href="{{ route('students.create') }}" class="btn btn-primary">Add New Student</a>
             <a href="{{ route('students.create', ['method' => 'bulk']) }}" class="btn btn-warning">Add Bulk Students</a>
         </div>
+
+        <div class="clearfix"></div>
 
         <div class="card">
             <div class="card-body">
@@ -47,18 +58,18 @@
                                     @if ($student->deleted_at)
                                         <a href="javascript:void(0)" onclick="$('#{{ $student->slug }}').submit()" class="btn btn-info waves-effect waves-light btn-sm"><i class="ri-user-received-line"></i></a>
                                     @else
-                                        <a href="{{ route('users.edit', $student->slug) }}" class="btn btn-warning waves-effect waves-light btn-sm"><i class="ri-edit-line"></i></a>
+                                        <a href="{{ route('students.edit', $student->slug) }}" class="btn btn-warning waves-effect waves-light btn-sm"><i class="ri-edit-line"></i></a>
                                         <a href="javascript:void(0)" onclick="$('#{{ $student->slug }}').submit()" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-line"></i></a>
 
                                     @endif
-                                    <form id="{{ $student->slug }}" action="{{ route('users.destroy', $student->username) }}" method="post">@csrf @method('DELETE')</form>
+                                    <form id="{{ $student->slug }}" action="{{ route('students.destroy', $student->username) }}" method="post">@csrf @method('DELETE')</form>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <div class="float-right">
-                    {{ $students->links('pagination::bootstrap-4') }}
+                <div>
+                    {{ $students->appends(request()->input())->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\Http;
 
 class BillingServiceProvider
 {
-    protected $customerInvoiceURL = '';
-    protected $nonCustomerInvouiceURL = '';
+    protected $nonCustomerInvouiceURL = 'http://41.59.86.242/BILLINGV2/v1/noncustomer_invoice_receiver';
+    protected $customerInvoiceURL = 'http://41.59.86.242/BILLINGV2/v1/customer_invoice_receiver';
+    protected $registerCostumer = 'http://41.59.86.242/BILLINGV2/v1/register_customer';
     protected $itemGFSCode;
     protected $currency;
     protected $amount;
@@ -27,23 +28,39 @@ class BillingServiceProvider
         $this->description = $description;
     }
 
-    public function createCustomerInvoice($customerNo, $reference)
+    public function createCustomerInvoice($customerNo, $reference, $name=null, $mobile=null, $email=null)
     {
-        $data = [
-            'customer_no' => $customerNo,
-            'reference' => $reference,
-            'description' => $this->description,
-            'amount' => $this->amount,
-            'item_code' => $this->itemGFSCode,
-            'currency' => $this->currency,
-        ];
+        do {
+            $data = [
+                'customer_no' => $customerNo,
+                'reference' => $reference,
+                'description' => $this->description,
+                'amount' => $this->amount,
+                'item_code' => $this->itemGFSCode,
+                'currency' => $this->currency,
+                // 'payment_option' => 2
+            ];
+    
+            $auth = [
+                'code' => $this->apiCode,
+                'token' => $this->apiKey,
+            ];
+    
+            $oldResponse = Http::post($this->customerInvoiceURL, ['auth' => $auth, 'data' => $data])->json();
+    
+            if ($oldResponse['code'] === 104) {
+                $data = [
+                    'customer_no' => $customerNo,
+                    'mobile' => $mobile,
+                    'customer_name' => $name,
+                    'email' => $email,
+                ];
+    
+                $response = Http::post($this->registerCostumer, ['auth' => $auth, 'data' => $data])->json();
+            }
+        } while ($oldResponse['code'] === 104);
 
-        $auth = [
-            'code' => $this->apiCode,
-            'token' => $this->apiKey,
-        ];
-
-        $response = Http::post($this->customerInvoiceURL, ['auth' => $auth, 'data' => $data]);
+        return $oldResponse;
     }
 
     public function createNonCustomerInvoice($customerNo, $reference, $name, $mobile, $email)
@@ -65,6 +82,6 @@ class BillingServiceProvider
             'token' => $this->apiKey,
         ];
 
-        $response = Http::post($this->nonCustomerInvouiceURL, ['auth' => $auth, 'data' => $data]);
+        return $response = Http::post($this->nonCustomerInvouiceURL, ['auth' => $auth, 'data' => $data])->json();
     }
 }

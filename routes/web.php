@@ -3,18 +3,21 @@
 use App\Models\Room;
 use App\Models\Student;
 use App\Models\Shortlist;
+use App\Models\AcademicYear;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SideController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlockController;
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DeadlineController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Services\BillingServiceProvider;
 use App\Http\Controllers\ApplicationController;
-use App\Http\Controllers\BillingController;
+use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +49,8 @@ Route::prefix('student')->middleware('guest')->group(function ()
     Route::get('application/get-status', [ApplicationController::class, 'getStatus'])->name('applications-status');
     Route::get('application/{student}', [ApplicationController::class, 'application'])->name('application');
     Route::post('application/{student}', [ApplicationController::class, 'apply'])->name('application.send');
+    // Route::get('application/{student}/edit', [ApplicationController::class, 'editApplication'])->name('application.edit');
+    // Route::put('application/{student}/edit', [ApplicationController::class, 'editApplication'])->name('application.update');
     Route::get('otp/{student}', [ApplicationController::class, 'sendOTP'])->name('otp.send')->middleware('throttle:OTPRequest');
     Route::get('payment/{student}', [ApplicationController::class, 'payment'])->name('payment');
     Route::post('invoice-otp/{student}/{otp?}', [ApplicationController::class, 'createInvoice'])->name('invoice.create-otp');
@@ -109,12 +114,14 @@ Route::middleware('auth:sanctum')->group(function ()
 //     return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
 // });
 
-Route::get('get-rooms', function ()
-{
-   return Room::femaleRooms()->sum('capacity');
-});
+// Route::get('api-test', [TestController::class, 'testApi']);
 
-Route::get('get-shortlist', function ()
-{
-    return Shortlist::maleShortlist()->with('student')->get();
-});
+// Route::get('get-rooms', function ()
+// {
+//    return Room::femaleRooms()->sum('capacity');
+// });
+
+// Route::get('get-shortlist', function ()
+// {
+//     return Shortlist::maleShortlist()->with('student')->get();
+// });
