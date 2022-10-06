@@ -19,10 +19,15 @@ use App\Jobs\Shortlist as JobsShortlist;
 use Illuminate\Database\Eloquent\Builder;
 use GuzzleHttp\Exception\ConnectException;
 use App\Http\Services\BillingServiceProvider;
+use App\Traits\InvoiceProcess;
+use App\Traits\ReferenceGenerator;
 use Illuminate\Http\Client\ConnectionException;
 
 class ApplicationController extends Controller
 {
+    use ReferenceGenerator;
+    use InvoiceProcess;
+
     public function __construct(Request $request)
     {
         $this->middleware('deadline.check')->only(['identification', 'apply']);
@@ -243,7 +248,7 @@ class ApplicationController extends Controller
 
         try {
             $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
-        } catch (ConnectException $e) {
+        } catch (ConnectionException $e) {
             toastr()->error('Could not fetch programmes refresh the page', 'Host resolve failure');
             $programmes = [];
         }
@@ -315,55 +320,28 @@ class ApplicationController extends Controller
 
     public function createInvoice(Request $request, Student $student, $otp = null)
     {
-        $request->validate([
-            'otp' => ['required', 'string'],
-        ]);
+        // $request->validate([
+        //     'otp' => ['required', 'string'],
+        // ]);
 
         if (!$request->hasValidSignature()) { // abort if the url is expired
-            toastr()->error('URL has expired! URL expire after 1 minute');
+            toastr()->error('link expire after 1 minute', 'URL has expired!');
             return back();
         }
 
-        $otp = new OTP();
-        if ($otp->verifyOTP($student, $request->otp)) { // otp is valid
+        // $otp = new OTP();
+        // if ($otp->verifyOTP($student, $request->otp)) { // otp is valid
 
             // create invoice
-            $invoice = $student->invoices()->firstOrCreate([
-                'academic_year_id' => AcademicYear::current()->id
-            ], [
-                'reference' => rand(18821, 12128121)
-            ]);
-
-            // call billing api for invoice creation
-            $billingService = new BillingServiceProvider('141501070144', 'TZS', 107100, 'accommodation fee');
-
-            try {
-                if ($student->is_fresher) {
-                    $response = $billingService->createNonCustomerInvoice(
-                        $student->username,
-                        $invoice->reference,
-                        $student->name,
-                        $student->phone,
-                        $student->email
-                    );
-                } else {
-                    $response = $billingService->createCustomerInvoice(
-                        $student->username,
-                        $invoice->reference,
-                    );
-                }
-
-                toastr()->success('Invoice has been created successfully');
-            
-            } catch (\Throwable $e) {
-                toastr()->error($e->message, 'Something went wrong!');
+            if ($this->invoiceCreate($student)) {
+                toastr()->success('Invoice created successfully');
             }
 
             return back();
-        } else {
-            toastr()->error('OTP is invalid');
-            return back();
-        }
+        // } else {
+        //     toastr()->error('OTP is invalid');
+        //     return back();
+        // }
     }
 
     public function sendOTP(Student $student)

@@ -30,7 +30,7 @@ class BillingServiceProvider
 
     public function createCustomerInvoice($customerNo, $reference, $name=null, $mobile=null, $email=null)
     {
-        do {
+        // do {
             $data = [
                 'customer_no' => $customerNo,
                 'reference' => $reference,
@@ -38,7 +38,7 @@ class BillingServiceProvider
                 'amount' => $this->amount,
                 'item_code' => $this->itemGFSCode,
                 'currency' => $this->currency,
-                // 'payment_option' => 2
+                'payment_option' => 2
             ];
     
             $auth = [
@@ -48,17 +48,17 @@ class BillingServiceProvider
     
             $oldResponse = Http::post($this->customerInvoiceURL, ['auth' => $auth, 'data' => $data])->json();
     
-            if ($oldResponse['code'] === 104) {
-                $data = [
-                    'customer_no' => $customerNo,
-                    'mobile' => $mobile,
-                    'customer_name' => $name,
-                    'email' => $email,
-                ];
+        //     if ($oldResponse['code'] === 104) {
+        //         $data = [
+        //             'customer_no' => $customerNo,
+        //             'mobile' => $mobile,
+        //             'customer_name' => $name,
+        //             'email' => $email,
+        //         ];
     
-                $response = Http::post($this->registerCostumer, ['auth' => $auth, 'data' => $data])->json();
-            }
-        } while ($oldResponse['code'] === 104);
+        //         $response = Http::post($this->registerCostumer, ['auth' => $auth, 'data' => $data])->json();
+        //     }
+        // } while ($oldResponse['code'] === 104);
 
         return $oldResponse;
     }

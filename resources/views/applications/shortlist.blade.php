@@ -19,43 +19,47 @@
                     </form>
                 </div>
 
-                <table id="" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Full Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Student Type</th>
-                        <th>Level</th>
-                        <th>Sponsorship</th>
-                        {{-- <th class="text-center">Status</th> --}}
-                        <th class="text-center">Action</th>
-                    </tr>
-                    </thead>
+                <div class="table-responsive">
+                    <table id="" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Student Type</th>
+                            <th>Level</th>
+                            <th>Sponsorship</th>
+                            {{-- <th class="text-center">Status</th> --}}
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
+    
+    
+                        <tbody>
+                        @foreach ($shortlists as $key => $shortlist)
+                                <tr>
+                                    <th>{{ $key + $shortlists->firstItem() }}</th>
+                                    <td>{{ $shortlist->student->name }}</td>
+                                    <td>{{ $shortlist->student->username }}</td>
+                                    <td>{{ $shortlist->student->email }}</td>
+                                    <td>{{ $shortlist->student->phone }}</td>
+                                    <td>{{ $shortlist->student->student_type }}</td>
+                                    <td>{{ $shortlist->student->level }}</td>
+                                    <td>{{ $shortlist->student->sponsor }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('invoice.create', $shortlist->student->slug) }}" class="btn btn-primary waves-effect waves-light btn-sm" title="create invoice"><i class="ri-refund-line"></i></a>
 
-
-                    <tbody>
-                    @foreach ($shortlists as $key => $shortlist)
-                            <tr>
-                                <th>{{ $key + $shortlists->firstItem() }}</th>
-                                <td>{{ $shortlist->student->name }}</td>
-                                <td>{{ $shortlist->student->username }}</td>
-                                <td>{{ $shortlist->student->email }}</td>
-                                <td>{{ $shortlist->student->phone }}</td>
-                                <td>{{ $shortlist->student->student_type }}</td>
-                                <td>{{ $shortlist->student->level }}</td>
-                                <td>{{ $shortlist->student->sponsor }}</td>
-                                <td class="text-center">
-                                    <a href="javascript:void(0)" onclick="removeShortlist({{ $shortlist->id }})" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-2-line"></i></a>
-
-                                    <form id="{{ $shortlist->id }}" action="{{ route('remove.shortlisted', $shortlist->id) }}" method="post">@csrf @if (!$shortlist->red_flagged) @method('DELETE') @endif </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                        <a href="javascript:void(0)" onclick="removeShortlist({{ $shortlist->id }})" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-2-line"></i></a>
+    
+                                        <form id="{{ $shortlist->id }}" action="{{ route('remove.shortlisted', $shortlist->id) }}" method="post">@csrf @if (!$shortlist->red_flagged) @method('DELETE') @endif </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
                 <div>
                     {{ $shortlists->appends(request()->input())->links('pagination::bootstrap-5') }}

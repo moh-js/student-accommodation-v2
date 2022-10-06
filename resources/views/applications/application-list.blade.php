@@ -30,50 +30,51 @@
         <div class="card">
             <div class="card-body">
 
-
-                <table id="" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Full Name</th>
-                        <th>Application ID</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                    </thead>
-
-
-                    <tbody>
-                        @foreach ($applications as $key => $application)
-                            <tr>
-                                <th>{{ $key + $applications->firstItem() }}</th>
-                                <td>{{ $application->student->name }}</td>
-                                <td>{{ $application->application_id }}</td>
-                                <td>{{ $application->student->username }}</td>
-                                <td>{{ $application->student->email }}</td>
-                                <td>{{ $application->student->phone }}</td>
-                                <td class="text-center">
-                                    @if ($application->red_flagged)
-                                        <span class="badge badge-danger">Declined</span>
-                                    @else
-                                        <span class="badge badge-primary">Received</span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if ($application->red_flagged)
-                                        <a href="javascript:void(0)" onclick="restoreApplication({{ $application->application_id }})" class="btn btn-info waves-effect waves-light btn-sm"><i class="ri-checkbox-multiple-line"></i></a>
-                                    @else
-                                        <a href="javascript:void(0)" onclick="revokeApplication({{ $application->application_id }})" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-2-line"></i></a>
-                                    @endif
-                                    <form id="{{ $application->application_id }}" action="{{ route($application->red_flagged?'application-accept':'application-decline', $application->application_id) }}" method="post">@csrf @if (!$application->red_flagged) @method('DELETE') @endif </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Full Name</th>
+                            <th>Application ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
+    
+    
+                        <tbody>
+                            @foreach ($applications as $key => $application)
+                                <tr>
+                                    <th>{{ $key + $applications->firstItem() }}</th>
+                                    <td>{{ $application->student->name }}</td>
+                                    <td>{{ $application->application_id }}</td>
+                                    <td>{{ $application->student->username }}</td>
+                                    <td>{{ $application->student->email }}</td>
+                                    <td>{{ $application->student->phone }}</td>
+                                    <td class="text-center">
+                                        @if ($application->red_flagged)
+                                            <span class="badge badge-danger">Declined</span>
+                                        @else
+                                            <span class="badge badge-primary">Received</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($application->red_flagged)
+                                            <a href="javascript:void(0)" onclick="restoreApplication({{ $application->application_id }})" class="btn btn-info waves-effect waves-light btn-sm"><i class="ri-checkbox-multiple-line"></i></a>
+                                        @else
+                                            <a href="javascript:void(0)" onclick="revokeApplication({{ $application->application_id }})" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-2-line"></i></a>
+                                        @endif
+                                        <form id="{{ $application->application_id }}" action="{{ route($application->red_flagged?'application-accept':'application-decline', $application->application_id) }}" method="post">@csrf @if (!$application->red_flagged) @method('DELETE') @endif </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 
                 <div>
                     {{ $applications->appends(request()->input())->links('pagination::bootstrap-5') }}

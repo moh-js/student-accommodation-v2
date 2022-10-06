@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AcademicYear;
 use App\Models\Invoice;
+use App\Models\Student;
+use App\Models\AcademicYear;
+use App\Traits\InvoiceProcess;
+use App\Traits\ReferenceGenerator;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
+    use InvoiceProcess;
+    use ReferenceGenerator;
+
     /**
      * Display a listing of the resource.
      *
@@ -38,9 +44,16 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Student $student)
     {
-        //
+        $this->authorize('invoice-create');
+
+        $students = Student::all();
+
+        return view('invoices.create', [
+            'student' => $student,
+            'students' => $students
+        ]);
     }
 
     /**
@@ -49,9 +62,18 @@ class InvoiceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Student $student)
     {
-        //
+        $this->authorize('invoice-create');
+
+        if ($student) {
+            if ($this->invoiceCreate($student)) {
+                toastr()->success('Invoice created successfully');
+                return redirect()->route('invoices.index', AcademicYear::current()->id);
+            } else {
+                return back()->withInput();
+            }
+        }
     }
 
     /**

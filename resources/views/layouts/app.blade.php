@@ -37,6 +37,8 @@
         <!-- App Css-->
         <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
+        @livewireStyles
+        
         <link rel="stylesheet" href="//cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
         <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
@@ -180,7 +182,8 @@
             <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
             <script src="//cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
             {!! Toastr::message() !!}
-
+            @livewireScripts
+            
             @stack('script')
 
         </body>
@@ -211,6 +214,8 @@
 
             <script src="//cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
             {!! Toastr::message() !!}
+
+            @livewireScripts
 
             @stack('script')
 

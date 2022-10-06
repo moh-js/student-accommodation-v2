@@ -21,22 +21,14 @@ class TestController extends Controller
     ]);
 
     $invoice->update([
-        'reference' => $this->generate($invoice)
+        'reference' => $this->generate($invoice),
+        'amount' => 107100
     ]);
 
     // call billing api for invoice creation
-    $billingService = new BillingServiceProvider('141501070144', 'TZS', 107100, 'accommodation fee');
+    $billingService = new BillingServiceProvider('141501070144', 'TZS', $invoice->amount, 'accommodation fee');
 
     try {
-        // if ($student->is_fresher) {
-        //     $response = $billingService->createNonCustomerInvoice(
-        //         $student->username,
-        //         $invoice->reference,
-        //         $student->name,
-        //         $student->phone,
-        //         $student->email
-        //     );
-        // } else {
             $response = $billingService->createCustomerInvoice(
                 $student->username,
                 $invoice->reference,
@@ -44,14 +36,18 @@ class TestController extends Controller
                 $student->phone,
                 $student->email
             );
-        // }
+
+
 
         if ($response['code'] === 200) {
             $invoice->update([
-                'invoice_no' => $response['response']['invoice_no']
+                'invoice_no' => $response['response']['invoice_no'],
+                'currency' => $response['response']['currency']
             ]);
         }
-        return $invoice;
+
+        return $response;
+
     } catch (\Throwable $e) {
         return $e;
         toastr()->error($e->message, 'Something went wrong!');

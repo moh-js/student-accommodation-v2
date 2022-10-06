@@ -23,6 +23,9 @@ class Shortlist implements ShouldQueue
     protected $sponsor = ['sponsor', 'government'];
     protected $female = ['gender_id', 2];
     protected $male = ['gender_id', 1];
+    protected $certificate_award = ['award', 'certificate'];
+    protected $diploma_award = ['award', 'diploma'];
+    protected $bachelor_award = ['award', 'bachelor'];
     protected $shortlist = [];
     protected $checked = [];
 
@@ -46,9 +49,13 @@ class Shortlist implements ShouldQueue
         $privileges = [
             [$this->disabled],
             [$this->foreigner],
+            [$this->certificate_award],
+            [$this->sponsor, $this->fresher],
             [$this->sponsor],
             [$this->fresher, $this->female],
             [$this->female],
+            [$this->fresher, $this->male, $this->diploma_award],
+            [$this->fresher, $this->male, $this->bachelor_award],
             [$this->fresher],
             [$this->male]
         ];

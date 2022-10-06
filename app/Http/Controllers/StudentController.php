@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\GovSponsorStudent;
 use App\Models\Student;
 use App\Rules\CustomUnique;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Builder;
+use Toastr;
 
 class StudentController extends Controller
 {
@@ -20,9 +22,9 @@ class StudentController extends Controller
         $this->authorize('student-view');
 
         if ($request->has('search')) {
-            $students = Student::where('username', 'like', '%'.request('search').'%')->paginate(50);
+            $students = Student::withTrashed()->where('username', 'like', '%'.request('search').'%')->paginate(50);
         } else {
-            $students = Student::paginate(50);
+            $students = Student::withTrashed()->paginate(50);
         }
 
         return view('students.index', [
@@ -123,6 +125,8 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
+        $this->authorize('student-delete');
+
         if ($student->trashed()) {
             $this->authorize('student-activate');
             $student->restore();
@@ -133,7 +137,28 @@ class StudentController extends Controller
             $action = 'deleted';
         }
 
-        toastr()->success("group $action successfully");
+        toastr()->success("Student $action successfully");
+        return redirect()->route('students.index');
+    }
+
+    public function importGovSponsorPage()
+    {
+        $this->authorize('student-add');
+
+        return view('students.gov-sponsor');
+    }
+
+    public function importGovSponsor(Request $request)
+    {
+        $this->authorize('student-add');
+
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls']
+        ]);
+        
+        (new GovSponsorStudent)->import($request->file);
+
+        toastr()->success('File imported successfully');
         return redirect()->route('students.index');
     }
 }

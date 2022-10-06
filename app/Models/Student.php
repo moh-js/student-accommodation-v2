@@ -116,4 +116,9 @@ class Student extends Model
         });
     }
 
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->withTrashed()->where('slug', $value)->first();
+    }
+
 }

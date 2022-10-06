@@ -25,16 +25,16 @@ class RoleSeeder extends Seeder
                     ['block', 'action' => ['view', 'add', 'update', 'delete']],
                     ['side', 'action' => ['view', 'add', 'update', 'delete']],
                     ['room', 'action' => ['view', 'add', 'update', 'delete']],
-                    ['student', 'action' => ['view', 'add', 'update','remove-allocation', 'allocation']],
+                    ['student', 'action' => ['view', 'add', 'update','remove-allocation', 'allocation', 'delete']],
                 ]
             ], [
                 'name' => 'dean', 'permissions' => [
-                    ['student', 'action' => ['view', 'add', 'update','remove-allocation', 'allocation']],
+                    ['student', 'action' => ['view', 'add', 'update','remove-allocation', 'allocation', 'delete']],
                     ['block', 'action' => ['view', 'add', 'update', 'delete']],
                     ['side', 'action' => ['view', 'add', 'update', 'delete']],
                     ['room', 'action' => ['view', 'add', 'update', 'delete']],
                     ['application', 'action' => ['view', 'decline', 'accept', 'update']],
-                    ['invoice', 'action' => ['view']],
+                    ['invoice', 'action' => ['view', 'create']],
                     ['shortlist', 'action' => ['view', 'create', 'delete']],
                     ['deadline', 'action' => ['view', 'add', 'update']],
                 ]

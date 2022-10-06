@@ -31,34 +31,15 @@
                         </div>
                     </div>
 
+                    @if (session('no_costumer'))
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Note: {{ session('no_costumer') }}</strong>
+                            <p>You must use your <a href="https://sims.must.ac.tz" target="_blank">SIMS</a> account to create invoice and pay for administrative fee first, before paying the accommodation fee.</p>
+                        </div>
+                    @endif
 
                     @if ($invoice)
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-bordered">
-                                    <thead class="">
-                                        <tr class="table-primary">
-                                            <td>Reference #</td>
-                                            <td>Invoice #</td>
-                                            <td>Control #</td>
-                                            <td>Amount</td>
-                                            <td class="text-center">Status</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{{ $invoice->reference }}</td>
-                                            <td>{{ $invoice->invoice_no }}</td>
-                                            <td>{{ $invoice->control_number }}</td>
-                                            <td>{{ $invoice->amount }}</td>
-                                            <td class="text-center">
-                                                <span class="badge badge-danger">Not paid</span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        @livewire('invoice-table', ['student' => $student], key($student->id))
 
                         @if ($invoice->status)
                             <a href="{{ route('allocation', ['student' => $student->slug, 'academic_year' => $currentAcademicYear->slug]) }}" class="btn btn-primary">Next</a>
@@ -67,7 +48,7 @@
                         <form action="{{ URL::temporarySignedRoute('invoice.create-otp', now()->addMinutes(1), ['otp' => $shortlist->otp, 'student' => $student->slug]) }}" method="POST">
                             @csrf
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="">OTP</label>
@@ -79,11 +60,10 @@
                                         @enderror
                                     </div>
                                 </div>
-                            </div>
-                            {{ session('otp') }}
+                            </div> --}}
 
                             <div class="form-group">
-                                <a href="{{ route('otp.send', $student->slug) }}" class="btn btn-info">Get otp code</a>
+                                {{-- <a href="{{ route('otp.send', $student->slug) }}" class="btn btn-info">Get otp code</a> --}}
                                 <button type="submit" class="btn btn-primary">Create invoice</button>
                             </div>
 

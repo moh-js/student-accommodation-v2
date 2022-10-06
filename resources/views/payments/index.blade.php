@@ -24,50 +24,51 @@
         </div>
         <div class="card">
             <div class="card-body">
-
-                <table id="datatable" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                    <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Invoice #</th>
-                        <th>Control #</th>
-                        <th>Amount Paid</th>
-                        <th>Balance</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                    </thead>
-
-
-                    <tbody>
-                        @foreach ($invoices as $invoice)
-                            <tr>
-                                <td>{{ $invoice->student->name }}</td>
-                                <td>{{ $invoice->invoice_no }}</td>
-                                <td>{{ $invoice->control_number }}</td>
-                                <td>{{ $invoice->amount_paid }}</td>
-                                <td>{{ $invoice->amount - $invoice->amount_paid }}</td>
-                                <td class="text-center">
-                                    @if (1)
-                                        <span class="badge badge-pill badge-danger">Not paid</span>
-                                    @else
-                                        <span class="badge badge-pill badge-primary">Paid</span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    {{-- @if ($invoice->deleted_at)
-                                        <a href="javascript:void(0)" onclick="$('#{{ $invoice->slug }}').submit()" class="btn btn-info waves-effect waves-light btn-sm"><i class=" ri-store-3-line"></i></a>
-                                    @else
-                                        <a href="{{ route('rooms.edit', $invoice->slug) }}" class="btn btn-warning waves-effect waves-light btn-sm"><i class="ri-edit-line"></i></a>
-                                        <a href="javascript:void(0)" onclick="$('#{{ $invoice->slug }}').submit()" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-line"></i></a>
-
-                                    @endif
-                                    <form id="{{ $invoice->slug }}" action="{{ route('rooms.destroy', $invoice->slug) }}" method="post">@csrf @method('DELETE')</form> --}}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="datatable" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Invoice #</th>
+                            <th>Control #</th>
+                            <th>Amount Paid</th>
+                            <th>Balance</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
+    
+    
+                        <tbody>
+                            @foreach ($invoices as $invoice)
+                                <tr>
+                                    <td>{{ $invoice->student->name }}</td>
+                                    <td>{{ $invoice->invoice_no }}</td>
+                                    <td>{{ $invoice->control_number }}</td>
+                                    <td>{{ $invoice->amount_paid }}</td>
+                                    <td>{{ $invoice->amount - $invoice->amount_paid }}</td>
+                                    <td class="text-center">
+                                        @if (1)
+                                            <span class="badge badge-pill badge-danger">Not paid</span>
+                                        @else
+                                            <span class="badge badge-pill badge-primary">Paid</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        {{-- @if ($invoice->deleted_at)
+                                            <a href="javascript:void(0)" onclick="$('#{{ $invoice->slug }}').submit()" class="btn btn-info waves-effect waves-light btn-sm"><i class=" ri-store-3-line"></i></a>
+                                        @else
+                                            <a href="{{ route('rooms.edit', $invoice->slug) }}" class="btn btn-warning waves-effect waves-light btn-sm"><i class="ri-edit-line"></i></a>
+                                            <a href="javascript:void(0)" onclick="$('#{{ $invoice->slug }}').submit()" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-line"></i></a>
+    
+                                        @endif
+                                        <form id="{{ $invoice->slug }}" action="{{ route('rooms.destroy', $invoice->slug) }}" method="post">@csrf @method('DELETE')</form> --}}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
         </div>
