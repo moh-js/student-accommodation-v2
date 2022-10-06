@@ -7,11 +7,9 @@ use App\Http\Services\BillingServiceProvider;
 
 trait InvoiceProcess {
 
-    protected $amount;
-
     public function invoiceCreate($student)
     {
-        $this->amount = 107100;
+        $amount = 107100;
         
         // create invoice
         $invoice = $student->invoices()->firstOrCreate([
@@ -19,11 +17,11 @@ trait InvoiceProcess {
         ]);
 
         // call billing api for invoice creation
-        $billingService = new BillingServiceProvider('141501070144', 'TZS', $this->amount, 'accommodation fee');
+        $billingService = new BillingServiceProvider('141501070144', 'TZS', $amount, 'accommodation fee');
 
-        $invoice->save([
+        $invoice->update([
             'reference' => $this->generate($invoice),
-            'amount' => $this->amount
+            'amount' => $amount
         ]);
 
         // call billing api for invoice creation
@@ -40,7 +38,7 @@ trait InvoiceProcess {
             );
 
             if ($response['code'] === 200) {
-                $invoice->save([
+                $invoice->update([
                     'invoice_no' => $response['response']['invoice_no'],
                     'currency' => $response['response']['currency']
                 ]);
@@ -57,7 +55,7 @@ trait InvoiceProcess {
             }
 
         } catch (\Throwable $e) {
-            toastr()->error($e->message, 'Something went wrong!');
+            toastr()->error('Something went wrong!');
             return 0;
         }
     }

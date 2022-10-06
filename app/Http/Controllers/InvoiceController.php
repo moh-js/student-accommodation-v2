@@ -69,7 +69,7 @@ class InvoiceController extends Controller
         if ($student) {
             if ($this->invoiceCreate($student)) {
                 toastr()->success('Invoice created successfully');
-                return redirect()->route('invoices.index', AcademicYear::current()->id);
+                return redirect()->route('invoices.index', AcademicYear::current()->slug);
             } else {
                 return back()->withInput();
             }
