@@ -12,11 +12,11 @@ class BillingController extends Controller
 
     public function receiveControlNumber(Request $request)
     {
-        $request = json_decode('{
-            "invoice_no":"MB1030229",
-            "reference":"MR222760227",
-            "control_number":"991541054826"
-            }');
+        // $request = json_decode('{
+        //     "invoice_no":"MB1030229",
+        //     "reference":"MR222760227",
+        //     "control_number":"991541054826"
+        //     }');
 
         $invoice = Invoice::where([['invoice_no', $request->invoice_no], ['reference', $request->reference]])->first();
 
@@ -36,19 +36,19 @@ class BillingController extends Controller
 
     public function receivePayment(Request $request)
     {
-        $request = json_decode('{
-            "invoice_no":"MB1030229",
-            "reference":"MR222760227",
-            "control_number":"991541058633",
-            "receipt":"REC210001927",
-            "bank_receipt":"EC100676587634655IP",
-            "gateway_receipt":"9202390065609874934",
-            "amount":"2000.00",
-            "currency":"TZS",
-            "trans_date":"2021-06-23",
-            "timestamp":"2021-06-23 03:50:53",
-            "bank_account":"20901100002"
-            }');
+        // $request = json_decode('{
+        //     "invoice_no":"MB1030229",
+        //     "reference":"MR222760227",
+        //     "control_number":"991541058633",
+        //     "receipt":"REC210001927",
+        //     "bank_receipt":"EC100676587634655IP",
+        //     "gateway_receipt":"9202390065609874934",
+        //     "amount":"2000.00",
+        //     "currency":"TZS",
+        //     "trans_date":"2021-06-23",
+        //     "timestamp":"2021-06-23 03:50:53",
+        //     "bank_account":"20901100002"
+        //     }');
 
         $invoice = Invoice::where([['invoice_no', $request->invoice_no], ['reference', $request->reference]])->first();
 
