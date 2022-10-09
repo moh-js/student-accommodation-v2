@@ -38,8 +38,6 @@
         <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
         @livewireStyles
-        
-        <link rel="stylesheet" href="//cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
         <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
 
