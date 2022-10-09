@@ -39,7 +39,7 @@
                             @if(!$shortlist->is_published)
                                 <div class="alert alert-success" role="alert">
                                     <strong>Be patient</strong>
-                                    <p>The result for you has not been published yet, kindly wait and continue to visit this page. We will release the result soon.</p>
+                                    <p>The result has not been published yet, kindly wait and continue to visit this page. We will release the result soon.</p>
                                 </div>
                             @elseif ($shortlisted && ($studentKeyNumber <= $roomsCount))
                                 <div class="alert alert-success" role="alert">
