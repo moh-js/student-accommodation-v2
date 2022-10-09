@@ -36,7 +36,7 @@
 
                     @if ($student->currentApplication())
                         @if (($deadline->end_date->addDays(3)) < now())
-                            @if($shortlist->is_published)
+                            @if(!$shortlist->is_published)
                                 <div class="alert alert-success" role="alert">
                                     <strong>Be patient</strong>
                                     <p>The result for you has not been published yet, kindly wait and continue to visit this page. We will release the result soon.</p>

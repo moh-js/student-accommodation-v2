@@ -102,11 +102,11 @@ Route::middleware('auth:sanctum')->group(function ()
 //     return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
 // });
 
-Route::get('api-test', [TestController::class, 'testApi']);
+// Route::get('api-test', [TestController::class, 'testApi']);
 
 // Route::get('get-rooms', function ()
 // {
-//    return Room::femaleRooms()->sum('capacity');
+//    return Room::all()->sum('capacity');
 // });
 
 // Route::get('get-shortlist', function ()
