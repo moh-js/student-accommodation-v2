@@ -235,16 +235,7 @@ class ApplicationController extends Controller
 
     public function application(Student $student)
     {
-        if ($student->gender_id == 1) { // check if student is eligible to be selected to get room
-            $roomsCount = Room::maleRooms()->sum('capacity');
-            $studentShortlist = Shortlist::maleShortlist()->with('student')->get();
-        } else {
-            $roomsCount = Room::femaleRooms()->sum('capacity');
-            $studentShortlist = Shortlist::femaleShortlist()->with('student')->get();
-        }
-
-        $specificShortlist = $studentShortlist;
-        $studentKeyNumber = $studentShortlist->whereIn('student_id', $student->id)->keys()->first()+1;
+        
 
         try {
             $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
@@ -256,9 +247,7 @@ class ApplicationController extends Controller
         return view('applications.application', [
             'deadline' => $student->studentDeadline(),
             'student' => $student,
-            'roomsCount' => $roomsCount,
             'programmes' => collect($programmes)->sortBy('name'),
-            'studentKeyNumber' => $studentKeyNumber,
             'shortlist' => $student->shortlist,
             'shortlisted' => $student->isShortlisted(),
         ]);

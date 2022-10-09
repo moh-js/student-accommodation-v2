@@ -118,6 +118,15 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
-        //
+        $this->authorize('invoice-delete');
+
+        if ($invoice->control_number) {
+            toastr()->error("Invoice could not be deleted");
+        } else {
+            $invoice->forceDelete();
+            toastr()->success('Invoice deleted successfully');
+        }
+
+        return redirect()->route('invoices.index', AcademicYear::current()->slug);
     }
 }

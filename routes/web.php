@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->group(function ()
     {
         Route::get('/{academicYear}', 'index')->name('invoices.index');
         Route::post('/fetch', 'fetch')->name('invoices.fetch');
+        Route::delete('/{invoice}', 'destroy')->name('invoices.destroy');
     });
 
     Route::resource('users', UserController::class)->except(['show']);
@@ -111,5 +112,5 @@ Route::middleware('auth:sanctum')->group(function ()
 
 // Route::get('get-shortlist', function ()
 // {
-//     return Shortlist::maleShortlist()->with('student')->get();
+//     return Shortlist::maleShortlist()/* ->with('student') */->count();
 // });

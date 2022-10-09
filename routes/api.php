@@ -15,8 +15,8 @@ use App\Http\Controllers\BillingController;
 |
 */
 
-Route::get('/receive_control_number', [BillingController::class, 'receiveControlNumber']);
-Route::get('/receive_payment', [BillingController::class, 'receivePayment']);
+Route::get('/control_number_callback', [BillingController::class, 'receiveControlNumber']);
+Route::get('/payment_callback', [BillingController::class, 'receivePayment']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

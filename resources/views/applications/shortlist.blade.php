@@ -26,10 +26,10 @@
                             <th>#</th>
                             <th>Full Name</th>
                             <th>Username</th>
-                            <th>Email</th>
                             <th>Phone</th>
                             <th>Student Type</th>
                             <th>Level</th>
+                            <th>Eligible Status</th>
                             <th>Sponsorship</th>
                             {{-- <th class="text-center">Status</th> --}}
                             <th class="text-center">Action</th>
@@ -48,6 +48,12 @@
                                     <td>{{ $shortlist->student->student_type }}</td>
                                     <td>{{ $shortlist->student->level }}</td>
                                     <td>{{ $shortlist->student->sponsor }}</td>
+                                    <td>
+                                        @if (checkEligibility($shortlist->student))
+                                            <span class="badge badge-primary">Selected</span>
+                                        @else
+                                            <span class="badge badge-danger">Not Selected
+                                        @endif
                                     <td class="text-center">
                                         <a href="{{ route('invoice.create', $shortlist->student->slug) }}" class="btn btn-primary waves-effect waves-light btn-sm" title="create invoice"><i class="ri-refund-line"></i></a>
 

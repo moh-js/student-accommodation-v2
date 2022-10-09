@@ -25,8 +25,6 @@ class BillingController extends Controller
                 'control_number' => $request->control_number
             ]);
 
-            // fire event of control number recival for broadcasting
-
             return $this->success();
 
         } else {

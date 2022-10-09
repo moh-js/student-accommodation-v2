@@ -39,6 +39,8 @@
 
         @livewireStyles
 
+        <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+
         <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
 
         <style>

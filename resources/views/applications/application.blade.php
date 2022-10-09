@@ -41,7 +41,7 @@
                                     <strong>Be patient</strong>
                                     <p>The result has not been published yet, kindly wait and continue to visit this page. We will release the result soon.</p>
                                 </div>
-                            @elseif ($shortlisted && ($studentKeyNumber <= $roomsCount))
+                            @elseif ($shortlisted && checkEligibility($student))
                                 <div class="alert alert-success" role="alert">
                                     <strong>Congrats</strong>
                                     <p>You have been selected for in-campus accommodation. complete the payment to secure your place on time and avoid any inconvinience</p>

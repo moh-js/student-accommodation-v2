@@ -55,14 +55,8 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        {{-- @if ($invoice->deleted_at)
-                                            <a href="javascript:void(0)" onclick="$('#{{ $invoice->slug }}').submit()" class="btn btn-info waves-effect waves-light btn-sm"><i class=" ri-store-3-line"></i></a>
-                                        @else
-                                            <a href="{{ route('rooms.edit', $invoice->slug) }}" class="btn btn-warning waves-effect waves-light btn-sm"><i class="ri-edit-line"></i></a>
-                                            <a href="javascript:void(0)" onclick="$('#{{ $invoice->slug }}').submit()" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-line"></i></a>
-    
-                                        @endif
-                                        <form id="{{ $invoice->slug }}" action="{{ route('rooms.destroy', $invoice->slug) }}" method="post">@csrf @method('DELETE')</form> --}}
+                                            <a href="javascript:void(0)" onclick="deleteInvoice({{ $invoice }})" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-line"></i></a>
+                                        <form id="{{ $invoice->slug }}" action="{{ route('invoices.destroy', $invoice->slug) }}" method="post">@csrf @method('DELETE')</form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -87,7 +81,11 @@
     <script src="{{ asset('assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
 
     <script>
-        // $('#datatable').DataTable();
+        function deleteInvoice(invoice) {
+            if (confirm("Delete " + invoice.student.name + ' invoice?')) {
+                $('#'+invoice.slug).submit()
+            }
+        }
     </script>
 
     <!-- Datatable init js -->
