@@ -69,7 +69,7 @@ class Shortlist implements ShouldQueue
             Log::error('Could not shortlist students since their are already invoices created by the costumers');
 
         } else {
-            ModelsShortlist::query()->delete();
+            ModelsShortlist::destroy(ModelsShortlist::all()->pluck('id'));
 
             $this->shortlist = collect([]);
 
