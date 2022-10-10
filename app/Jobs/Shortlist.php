@@ -67,18 +67,17 @@ class Shortlist implements ShouldQueue
 
         if ($invoicesFound) {
             Log::error('Could not shortlist students since their are already invoices created by the costumers');
-            
+
         } else {
             ModelsShortlist::query()->delete();
 
-            $this->shortlist = collect();
-            $this->checked = collect();
+            $this->shortlist = collect([]);
 
             foreach ($privileges as $key => $privilege) {
 
                 $students = Student::hasApplication()->notRedFlagged()
                 ->where($privilege)
-                ->whereNotIn('id', $this->checked)
+                ->whereNotIn('id', $this->shortlist->toArray())
                 ->get();
 
                 foreach ($students as $student) {
@@ -87,7 +86,7 @@ class Shortlist implements ShouldQueue
                     ]);
                 }
 
-                $this->checked = collect($this->checked)->merge($students->pluck('id'));
+                $this->shortlist = $this->shortlist->merge($students->pluck('id'));
 
             }
         }
