@@ -441,6 +441,34 @@ class ApplicationController extends Controller
         return redirect()->back();
     }
 
+    public function publish()
+    {
+        $this->authorize('shortlist-publish');
+
+        foreach (Shortlist::all() as $shortlist) {
+            $shortlist->update([
+                'is_published' => 1
+            ]);
+        }
+
+        toastr()->success('Selection published successfully');
+        return back();
+    }
+
+    public function paymentFresher(Request $request, Student $student)
+    {
+        $request->validate([
+            'reg_number' => ['required', 'string'],
+        ]);
+
+        $student->update([
+            'username' => $request->reg_number
+        ]);
+
+        return redirect()->route('payment', $student->slug);
+
+    }
+
     // public function editApplication(Student $student)
     // {
     //     $this->authorize('application-update');

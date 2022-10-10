@@ -21,7 +21,7 @@
                             <p><strong>Phone Number</strong>: {{ $student->phone }}</p>
                         </div>
                         <div class="col-sm-4">
-                            <p><strong>Username</strong>: {{ $student->username }}</p>
+                            <p><strong>Registration #</strong>: {{ $student->username }}</p>
                         </div>
                         <div class="col-sm-4">
                             <p><strong>Programme</strong>: {{ $student->programme }}</p>

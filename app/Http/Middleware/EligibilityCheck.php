@@ -22,25 +22,15 @@ class EligibilityCheck
         $student = Student::where('slug', $studentSlug)->first();
 
         if ($student) {
-            if ($student->gender_id == 1) { // check if student is eligible to be selected to get room
-                $roomsCount = Room::maleRooms()->sum('capacity');
-                $studentShortlist = Shortlist::maleShortlist()->with('student')->get();
-            } else {
-                $roomsCount = Room::femaleRooms()->sum('capacity');
-                $studentShortlist = Shortlist::femaleShortlist()->with('student')->get();
-            }
-
-            $studentKeyNumber = $studentShortlist->whereIn('student_id', $student->id)->keys()->last();
-
-            if ($studentKeyNumber <= $roomsCount) {
+            if (checkEligibility($student)) {
                 return $next($request);
             } else {
-                toastr()->error('Sorry you are not eligible to do this action');
-                return redirect()->route('apply');
+                toastr()->error('Sorry you are not selected!', 'Not authorized');
+                return redirect()->back();
             }
         } else {
             toastr()->error('Oops! something went wrong');
-            return redirect()->route('apply');
+            return redirect()->back();
         }
 
     }

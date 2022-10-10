@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\AcademicYear;
+use App\Models\Invoice;
 use App\Models\Student;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Collection;
@@ -12,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Models\Shortlist as ModelsShortlist;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Log;
 
 class Shortlist implements ShouldQueue
 {
@@ -60,26 +63,35 @@ class Shortlist implements ShouldQueue
             [$this->male]
         ];
 
-        ModelsShortlist::query()->delete();
+        $invoicesFound = Invoice::query()->where('academic_year_id', AcademicYear::current()->id)->count();
 
-        $this->shortlist = collect();
-        $this->checked = collect();
+        if ($invoicesFound) {
+            Log::error('Could not shortlist students since their are already invoices created by the costumers');
+            
+        } else {
+            ModelsShortlist::query()->delete();
 
-        foreach ($privileges as $key => $privilege) {
+            $this->shortlist = collect();
+            $this->checked = collect();
 
-            $students = Student::hasApplication()->notRedFlagged()
-            ->where($privilege)
-            ->whereNotIn('id', $this->checked)
-            ->get();
+            foreach ($privileges as $key => $privilege) {
 
-            foreach ($students as $student) {
-                ModelsShortlist::firstOrCreate([
-                    'student_id' => $student->id
-                ]);
+                $students = Student::hasApplication()->notRedFlagged()
+                ->where($privilege)
+                ->whereNotIn('id', $this->checked)
+                ->get();
+
+                foreach ($students as $student) {
+                    ModelsShortlist::firstOrCreate([
+                        'student_id' => $student->id
+                    ]);
+                }
+
+                $this->checked = collect($this->checked)->merge($students->pluck('id'));
+
             }
-
-            $this->checked = collect($this->checked)->merge($students->pluck('id'));
-
         }
+        
+        
     }
 }

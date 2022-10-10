@@ -36,7 +36,7 @@
 
                     @if ($student->currentApplication())
                         @if (($deadline->end_date->addDays(3)) < now())
-                            @if(!$shortlist->is_published)
+                            @if(!$shortlist->is_published??false)
                                 <div class="alert alert-success" role="alert">
                                     <strong>Be patient</strong>
                                     <p>The result has not been published yet, kindly wait and continue to visit this page. We will release the result soon.</p>
@@ -46,8 +46,81 @@
                                     <strong>Congrats</strong>
                                     <p>You have been selected for in-campus accommodation. complete the payment to secure your place on time and avoid any inconvinience</p>
                                 </div>
+                                
+                                @if ($student->is_fresher)
+                                    <form action="{{ route('payment.fresher', $student->slug) }}" method="post">
+                                        @csrf
 
-                                <a href="{{ route('payment', $student->slug) }}" class="btn btn-primary">Next</a>
+                                        <div class="row">
+                                            <div class="form-group col-sm-6">
+                                                <label for="reg_number">Registration Number
+
+                                                    <a href="javascript:void(0)" data-toggle="modal" data-target="#how-to" class="text-info">
+                                                        <span class="d-flex align-items-center">
+                                                            <span style=""><i class="mr-1 ri-question-line"></i></span> where do i get registration number
+                                                        </span>
+                                                    </a>
+                                                </label>
+                                                <input type="text" name="reg_number" id="reg_number" class="form-control @error('reg_number') is-invalid @enderror" placeholder="22XXXXXXXXXXXXXX" aria-describedby="reg_number">
+                                               
+                                                @error('reg_number')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+    
+                                            <div class="form-group col-12">
+                                                <button type="submit" class="btn btn-primary">Next</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="how-to" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">How to get your registration number</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <strong>In order to get your registration number you should do the following steps.
+                                                    </strong>
+                                                    <ol>
+                                                        <li>
+                                                            Login to your sims account <a href="https://sims.must.ac.tz" target="_blank">Here</a>
+                                                        </li>
+                                                        <li>
+                                                            Create your first invoice so that you can pay for registration of your programme 
+                                                        </li>
+                                                        <li>
+                                                            After successfully creating your invoice you should see the list of your invoices, click on the one of the invoice number to download the invoice document
+                                                        </li>
+                                                        <li>
+                                                            Open the downloaded document and you will see the registration number on the list of your information
+                                                        </li>
+                                                        <li>
+                                                            Copy that registration number. and that's it you have your registration number.
+                                                        </li>
+                                                    </ol>
+
+                                                    <h5 class="text-danger">
+                                                        If you don't know how to create an invoice click <a target="_blank" href="https://must.ac.tz/portal/frontend/web/uploads/documents/275016319189158611201414121310_8.pdf">here</a> to get the instructions
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                @else
+                                    <a href="{{ route('payment', $student->slug) }}" class="btn btn-primary">Next</a>
+                                @endif
                             @else
                                 <div class="alert alert-danger" role="alert">
                                     <strong>Sorry</strong>
@@ -219,5 +292,17 @@
 
 @include('layouts.partials.footer')
 
-
 @endsection
+
+@push('link')
+    <style>
+        ul {
+            text-align:justify;
+        }
+
+        li {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    </style>
+@endpush

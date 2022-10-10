@@ -42,6 +42,7 @@ Route::prefix('student')->middleware('guest')->group(function ()
     // Route::put('application/{student}/edit', [ApplicationController::class, 'editApplication'])->name('application.update');
     Route::get('otp/{student}', [ApplicationController::class, 'sendOTP'])->name('otp.send')->middleware('throttle:OTPRequest');
     Route::get('payment/{student}', [ApplicationController::class, 'payment'])->name('payment');
+    Route::post('payment/{student}', [ApplicationController::class, 'paymentFresher'])->name('payment.fresher');
     Route::post('invoice-otp/{student}/{otp?}', [ApplicationController::class, 'createInvoice'])->name('invoice.create-otp');
     Route::get('allocation/{student}/{academic_year}', [ApplicationController::class, 'allocation'])->name('allocation');
 });
@@ -73,6 +74,7 @@ Route::middleware('auth:sanctum')->group(function ()
     {
         Route::get('/', 'applicationLists')->name('applications-list');
         Route::get('/shortlist', 'shortlistPage')->name('shortlist');
+        Route::get('/shortlist-publish', 'publish')->name('publish');
         Route::delete('/shortlist/{shortlist}', 'removeShortlisted')->name('remove.shortlisted');
         Route::post('/student/shortlist', 'shortlist')->name('applications.shortlist');
         Route::delete('/{application}', 'decline')->name('application-decline');
