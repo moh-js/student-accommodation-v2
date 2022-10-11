@@ -14,10 +14,12 @@
 
               <a href="{{ route('dashboard') }}" class="logo logo-light">
                   <span class="logo-sm">
-                      <img src="{{ asset('assets/images/logo-sm-light.png') }}" alt="" height="22">
+                        <span class="text-light"><strong>MAS</strong></span>
+                      {{-- <img src="{{ asset('assets/images/logo-sm-light.png') }}" alt="" height="22"> --}}
                   </span>
                   <span class="logo-lg">
-                      <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="20">
+                        <span class="text-light"><strong>MUST ACCOMMODATION</strong></span>
+                      {{-- <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="20"> --}}
                   </span>
               </a>
           </div>
