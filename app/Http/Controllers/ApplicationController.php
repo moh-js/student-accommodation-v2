@@ -372,7 +372,8 @@ class ApplicationController extends Controller
         if ($request->has('search')) {
             $applications = Application::currentYear()->whereHas('student', function (Builder $query)
             {
-                $query->where('username', 'like', '%'.request('search').'%');
+                $query->where('username', 'like', '%'.request('search').'%')
+                ->orWhere('name', 'like', '%'.request('search').'%');
             })->paginate(50);
         } else {
             $applications = Application::currentYear()->paginate(50);
@@ -424,7 +425,9 @@ class ApplicationController extends Controller
         if ($request->has('search')) {
             $shortlists = Shortlist::whereHas('student', function (Builder $query)
             {
-                $query->where('username', 'like', '%'.request('search').'%');
+                $query->where('username', 'like', '%'.request('search').'%')
+                ->orWhere('name', 'like', '%'.request('search').'%');
+
             })->paginate(50);
         } else {
             $shortlists = Shortlist::paginate(50);
