@@ -32,4 +32,11 @@ class Shortlist extends Model
             return $q->where('gender_id', 1);
         });
     }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('banned', function (Builder $builder) {
+            $builder->where('is_banned', 0);
+        });
+    }
 }

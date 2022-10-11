@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Http;
 
 class BillingServiceProvider
 {
-    protected $nonCustomerInvouiceURL = 'http://41.59.86.242/BILLINGV2/v1/noncustomer_invoice_receiver';
-    protected $customerInvoiceURL = 'http://41.59.86.242/BILLINGV2/v1/customer_invoice_receiver';
-    protected $registerCostumer = 'http://41.59.86.242/BILLINGV2/v1/register_customer';
+    protected $nonCustomerInvouiceURL;
+    protected $customerInvoiceURL;
+    protected $registerCostumer;
     protected $itemGFSCode;
     protected $currency;
     protected $amount;
@@ -21,7 +21,10 @@ class BillingServiceProvider
     {
         $this->apiCode = env('BILLING_CODE');
         $this->apiKey = env('BILLING_KEY');
-
+        $this->nonCustomerInvouiceURL = env('BILLING_URL').'/v1/noncustomer_invoice_receiver';
+        $this->customerInvoiceURL = env('BILLING_URL').'/v1/customer_invoice_receiver';
+        $this->registerCostumer = env('BILLING_URL').'/v1/register_customer';
+        
         $this->itemGFSCode = $itemGFSCode;
         $this->currency = $currency;
         $this->amount = $amount;
@@ -30,7 +33,7 @@ class BillingServiceProvider
 
     public function createCustomerInvoice($customerNo, $reference, $name=null, $mobile=null, $email=null)
     {
-        do {
+        // do {
             $data = [
                 'customer_no' => $customerNo,
                 'reference' => $reference,
@@ -48,17 +51,17 @@ class BillingServiceProvider
     
             $oldResponse = Http::post($this->customerInvoiceURL, ['auth' => $auth, 'data' => $data])->json();
     
-            if ($oldResponse['code'] === 104) {
-                $data = [
-                    'customer_no' => $customerNo,
-                    'mobile' => $mobile,
-                    'customer_name' => $name,
-                    'email' => $email,
-                ];
+        //     if ($oldResponse['code'] === 104) {
+        //         $data = [
+        //             'customer_no' => $customerNo,
+        //             'mobile' => $mobile,
+        //             'customer_name' => $name,
+        //             'email' => $email,
+        //         ];
     
-                $response = Http::post($this->registerCostumer, ['auth' => $auth, 'data' => $data])->json();
-            }
-        } while ($oldResponse['code'] === 104);
+        //         $response = Http::post($this->registerCostumer, ['auth' => $auth, 'data' => $data])->json();
+        //     }
+        // } while ($oldResponse['code'] === 104);
 
         return $oldResponse;
     }

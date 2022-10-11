@@ -248,8 +248,8 @@ class ApplicationController extends Controller
             'deadline' => $student->studentDeadline(),
             'student' => $student,
             'programmes' => collect($programmes)->sortBy('name'),
-            'shortlist' => $student->shortlist,
-            'shortlisted' => $student->isShortlisted(),
+            'shortlist' => $student->shortlist()->withoutGlobalScope('banned')->first(),
+            'shortlisted' => (null !== $student->shortlist()->withoutGlobalScope('banned')->first())?true:false,
         ]);
     }
 
@@ -298,6 +298,10 @@ class ApplicationController extends Controller
 
     public function payment(Student $student)
     {
+        if ($student->shortlist == null) {
+            toastr()->error('Your selection has been banned due to the delay in payment');
+            return back();
+        }
         return view('applications.payment', [
             'student' => $student,
             'currentAcademicYear' => AcademicYear::current(),
@@ -447,7 +451,8 @@ class ApplicationController extends Controller
 
         foreach (Shortlist::all() as $shortlist) {
             $shortlist->update([
-                'is_published' => 1
+                'is_published' => 1,
+                'payment_deadline_start' => now()
             ]);
         }
 
@@ -462,7 +467,11 @@ class ApplicationController extends Controller
         ]);
 
         $student->update([
-            'username' => $request->reg_number
+            'username' => $request->reg_number,            
+        ]);
+
+        $student->shortlist->update([
+            'has_reg_number' => 1
         ]);
 
         return redirect()->route('payment', $student->slug);

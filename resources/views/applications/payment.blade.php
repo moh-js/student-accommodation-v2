@@ -45,7 +45,7 @@
                             <a href="{{ route('allocation', ['student' => $student->slug, 'academic_year' => $currentAcademicYear->slug]) }}" class="btn btn-primary">Next</a>
                         @endif
                     @else
-                        <form action="{{ URL::temporarySignedRoute('invoice.create-otp', now()->addMinutes(1), ['otp' => $shortlist->otp, 'student' => $student->slug]) }}" method="POST">
+                        <form id="form" action="{{ URL::temporarySignedRoute('invoice.create-otp', now()->addMinutes(1), ['otp' => $shortlist->otp, 'student' => $student->slug]) }}" method="POST">
                             @csrf
 
                             {{-- <div class="row">
@@ -64,7 +64,7 @@
 
                             <div class="form-group">
                                 {{-- <a href="{{ route('otp.send', $student->slug) }}" class="btn btn-info">Get otp code</a> --}}
-                                <button type="submit" class="btn btn-primary">Create invoice</button>
+                                <button id="btnSubmit" type="submitForm()" class="btn btn-primary" onclick="submit(); this.disabled = true;">Create invoice</button>
                             </div>
 
                         </form>
@@ -79,3 +79,11 @@
 @include('layouts.partials.footer')
 
 @endsection
+
+@push('script')
+    <script>
+        function submitForm () {
+            $('#form').submit();
+        }
+    </script>
+@endpush
