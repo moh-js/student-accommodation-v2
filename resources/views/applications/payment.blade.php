@@ -24,10 +24,16 @@
                             <p><strong>Registration #</strong>: {{ $student->username }}</p>
                         </div>
                         <div class="col-sm-4">
-                            <p><strong>Programme</strong>: {{ $student->programme }}</p>
+                            <p><strong>Sponsor</strong>: {{ strtoupper($student->sponsor) }}</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><strong>Award</strong>: {{ strtoupper($student->award) }}</p>
                         </div>
                         <div class="col-sm-4">
                             <p><strong>Level</strong>: {{ title_case($student->level) }}</p>
+                        </div>
+                        <div class="col-sm-8">
+                            <p><strong>Programme</strong>: {{ $student->programme }}</p>
                         </div>
                     </div>
 
