@@ -12,7 +12,6 @@ class BillingController extends Controller
 
     public function receiveControlNumber(Request $request)
     {
-        return $request['invoice_no'];
 
         $invoice = Invoice::where([['invoice_no', $request['invoice_no']], ['reference', $request['reference']]])->first();
         

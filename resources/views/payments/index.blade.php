@@ -49,8 +49,8 @@
                                     <td>{{ $invoice->invoice_no }}</td>
                                     <td>{{ $invoice->reference }}</td>
                                     <td>{{ $invoice->control_number }}</td>
-                                    <td>{{ $invoice->amount_paid }}</td>
-                                    <td>{{ $invoice->amount - $invoice->amount_paid }}</td>
+                                    <td>{{ number_format($invoice->amount_paid) }} TZS</td>
+                                    <td>{{ number_format($invoice->amount - $invoice->amount_paid) }} TZS</td>
                                     <td class="text-center">
                                         @if (1)
                                             <span class="badge badge-pill badge-danger">Not paid</span>
