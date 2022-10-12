@@ -62,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::get('/{academicYear}', 'index')->name('invoices.index');
         Route::post('/fetch', 'fetch')->name('invoices.fetch');
         Route::delete('/{invoice}', 'destroy')->name('invoices.destroy');
+        Route::put('/{invoice}', 'update')->name('invoices.update');
     });
 
     Route::resource('users', UserController::class)->except(['show']);

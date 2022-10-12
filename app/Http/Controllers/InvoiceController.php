@@ -107,7 +107,16 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice)
     {
-        //
+        $request->validate([
+            'control_number' => ['nullable', 'integer']
+        ]);
+
+        $invoice->update([
+            'control_number' => $request->control_number??$invoice->control_number
+        ]);
+
+        toastr()->success('Data updated successfully');
+        return redirect()->back();
     }
 
     /**
