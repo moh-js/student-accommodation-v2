@@ -55,27 +55,33 @@
               <li class="menu-title">Menu</li>
 
               @foreach ($navigations as $navigation)
-                <li>
-                    <a href="{{ $navigation['url'] }}" class="{{ ($navigation['childrens']->count()) ? 'has-arrow':'' }} waves-effect">
-                        <i class="{{ $navigation['icon'] }}"></i>
-                        <span>{{ $navigation['title'] }}</span>
-                    </a>
-                    @if ($navigation['childrens'])
-                        <ul class="sub-menu" aria-expanded="true">
-                            @foreach ($navigation['childrens'] as $navChild1)
-                                <li><a href="{{ $navChild1['url'] }}" class="{{ ($navChild1['childrens']??false) ? 'has-arrow':'' }}">{{ $navChild1['title'] }}</a>
-                                    @if ($navChild1['children']??false)
-                                        <ul class="sub-menu" aria-expanded="true">
-                                            @foreach ($navChild1['children'] as $child)
-                                                <li><a href="{{ $child['url'] }}">{{ $child['title'] }}</a></li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </li>
+                @if ($navigation['permission'] || auth()->user()->hasRole('super-admin'))
+                    <li>
+                        <a href="{{ $navigation['url'] }}" class="{{ ($navigation['childrens']->count()) ? 'has-arrow':'' }} waves-effect">
+                            <i class="{{ $navigation['icon'] }}"></i>
+                            <span>{{ $navigation['title'] }}</span>
+                        </a>
+                        @if ($navigation['childrens'])
+                            <ul class="sub-menu" aria-expanded="true">
+                                @foreach ($navigation['childrens'] as $navChild1)
+                                @if ($navChild1['permission'] || auth()->user()->hasRole('super-admin'))
+                                    <li><a href="{{ $navChild1['url'] }}" class="{{ ($navChild1['childrens']??false) ? 'has-arrow':'' }}">{{ $navChild1['title'] }}</a>
+                                        @if ($navChild1['children']??false)
+                                            <ul class="sub-menu" aria-expanded="true">
+                                                @foreach ($navChild1['children'] as $child)
+                                                @if ($child['permission'] || auth()->user()->hasRole('super-admin'))
+                                                    <li><a href="{{ $child['url'] }}">{{ $child['title'] }}</a></li>
+                                                @endif
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </li>
+                                @endif
+                                @endforeach
+                            </ul>
+                        @endif
+                    </li>
+                @endif
               @endforeach
 
           </ul>
