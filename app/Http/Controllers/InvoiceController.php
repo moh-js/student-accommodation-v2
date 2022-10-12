@@ -67,6 +67,7 @@ class InvoiceController extends Controller
         $this->authorize('invoice-create');
 
         if ($student) {
+            return $this->invoiceCreate($student);
             if ($this->invoiceCreate($student)) {
                 toastr()->success('Invoice created successfully');
                 return redirect()->route('invoices.index', AcademicYear::current()->slug);
