@@ -28,8 +28,10 @@
                     <table id="datatable" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
+                            <th>Registration #</th>
                             <th>Student Name</th>
                             <th>Invoice #</th>
+                            <th>Reference</th>
                             <th>Control #</th>
                             <th>Amount Paid</th>
                             <th>Balance</th>
@@ -42,8 +44,10 @@
                         <tbody>
                             @foreach ($invoices as $invoice)
                                 <tr>
+                                    <td>{{ $invoice->student->username }}</td>
                                     <td>{{ $invoice->student->name }}</td>
                                     <td>{{ $invoice->invoice_no }}</td>
+                                    <td>{{ $invoice->reference }}</td>
                                     <td>{{ $invoice->control_number }}</td>
                                     <td>{{ $invoice->amount_paid }}</td>
                                     <td>{{ $invoice->amount - $invoice->amount_paid }}</td>
