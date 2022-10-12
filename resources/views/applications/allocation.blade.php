@@ -14,7 +14,7 @@
                     <div class="alert alert-success" role="alert">
                         <strong>Congratulation</strong>
                         <p>
-                             
+                            You have been registered as on-campus accommodation student.  
                         </p>
                     </div>
 
