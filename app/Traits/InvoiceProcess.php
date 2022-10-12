@@ -37,6 +37,8 @@ trait InvoiceProcess {
                     $student->phone,
                     $student->email
                 );
+
+                return $response;
     
                 if ($response['code'] === 200) {
                     $invoice->update([
