@@ -20,6 +20,7 @@ trait InvoiceProcess {
                 'academic_year_id' => AcademicYear::current()->id
             ]);
     
+          
             $invoice->update([
                 'reference' => $this->generate($invoice),
                 'amount' => $amount
@@ -28,7 +29,7 @@ trait InvoiceProcess {
             // call billing api for invoice creation
             $billingService = new BillingServiceProvider($GFSCode, $currency, $invoice->amount, $description);
     
-            // try {
+            try {
     
                 $response = $billingService->createCustomerInvoice(
                     $student->username,
@@ -37,8 +38,6 @@ trait InvoiceProcess {
                     $student->phone,
                     $student->email
                 );
-
-                return $response;
     
                 if ($response['code'] === 200) {
                     $invoice->update([
@@ -57,11 +56,10 @@ trait InvoiceProcess {
                     return 0;
                 }
     
-            // } catch (\Throwable $e) {
+            } catch (\Throwable $e) {
                 toastr()->error('Something went wrong!');
-                
                 return 0;
-            // }
+            }
         } else {
             toastr()->error('Unable to create invoice student not selected for accommodation');
         }
