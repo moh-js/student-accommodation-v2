@@ -120,17 +120,17 @@ Route::middleware('auth:sanctum')->group(function ()
 // });
 
 
-Route::get('export-all', function ()
-{   
-    (new ShortlistExport)->queue('shortlists.xlsx');
-});
+// Route::get('export-all', function ()
+// {   
+//     (new ShortlistExport)->queue('shortlists.xlsx');
+// });
 
-Route::get('export-male', function ()
-{   
-    (new ShortlistExport(1))->queue('shortlists.xlsx');
-});
+// Route::get('export-male', function ()
+// {   
+//     (new ShortlistExport(1))->queue('shortlists.xlsx');
+// });
 
-Route::get('export-female', function ()
-{   
-    (new ShortlistExport(2))->queue('shortlists.xlsx');
-});
+// Route::get('export-female', function ()
+// {   
+//     (new ShortlistExport(2))->queue('shortlists.xlsx');
+// });
