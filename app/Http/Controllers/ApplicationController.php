@@ -209,11 +209,14 @@ class ApplicationController extends Controller
 
             session(['student_type' => $student->student_type]);
 
-            if ($student->currentInvoice()) {
+            if ($student->currentInvoice()->status??false) {
+                return redirect()->route('allocation', ['student' => $student->slug, 'academic_year' => AcademicYear::current()->slug]);
+            } else if ($student->currentInvoice()) {
                 return redirect()->route('payment', $student->slug);
+            } else {
+                return redirect()->route('application', $student->slug);
             }
 
-            return redirect()->route('application', $student->slug);
         } else {
             toastr()->error('Incorrect username or application id');
             return back()->withInput();

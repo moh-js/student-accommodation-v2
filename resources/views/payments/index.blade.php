@@ -52,7 +52,7 @@
                                     <td>{{ number_format($invoice->amount_paid) }} TZS</td>
                                     <td>{{ number_format($invoice->amount - $invoice->amount_paid) }} TZS</td>
                                     <td class="text-center">
-                                        @if (1)
+                                        @if (!$invoice->status)
                                             <span class="badge badge-pill badge-danger">Not paid</span>
                                         @else
                                             <span class="badge badge-pill badge-primary">Paid</span>

@@ -26,40 +26,48 @@ trait InvoiceProcess {
                 'amount' => $amount
             ]);
     
-            // call billing api for invoice creation
-            $billingService = new BillingServiceProvider($GFSCode, $currency, $invoice->amount, $description);
-    
-            try {
-    
-                $response = $billingService->createCustomerInvoice(
-                    $student->username,
-                    $invoice->reference,
-                    $student->name,
-                    $student->phone,
-                    $student->email
-                );
-    
-                if ($response['code'] === 200) {
-                    $invoice->update([
-                        'invoice_no' => $response['response']['invoice_no'],
-                        'currency' => $response['response']['currency']
-                    ]);
-                    return 1;
-                } else {
-                    toastr()->error($response['message']);
-                  
-                    if ($response['code'] == 104) {
-                        session()->flash('no_costumer', 'You should pay for administrative fee first before paying for accommodation');
+            // do not create invoice for government sponsored students
+            if ($student->sponsor == 'government') { 
+                $invoice->update([
+                    'status' => 1
+                ]);
+            } else {
+                // call billing api for invoice creation
+                $billingService = new BillingServiceProvider($GFSCode, $currency, $invoice->amount, $description);
+        
+                try {
+        
+                    $response = $billingService->createCustomerInvoice(
+                        $student->username,
+                        $invoice->reference,
+                        $student->name,
+                        $student->phone,
+                        $student->email
+                    );
+        
+                    if ($response['code'] === 200) {
+                        $invoice->update([
+                            'invoice_no' => $response['response']['invoice_no'],
+                            'currency' => $response['response']['currency']
+                        ]);
+                        return 1;
+                    } else {
+                        toastr()->error($response['message']);
+                    
+                        if ($response['code'] == 104) {
+                            session()->flash('no_costumer', 'You should pay for administrative fee first before paying for accommodation');
+                        }
+        
+                        $invoice->forceDelete();
+                        return 0;
                     }
-    
-                    $invoice->forceDelete();
+        
+                } catch (\Throwable $e) {
+                    toastr()->error('Something went wrong!');
                     return 0;
                 }
-    
-            } catch (\Throwable $e) {
-                toastr()->error('Something went wrong!');
-                return 0;
             }
+            
         } else {
             toastr()->error('Unable to create invoice student not selected for accommodation');
         }

@@ -22,7 +22,10 @@ class StudentController extends Controller
         $this->authorize('student-view');
 
         if ($request->has('search')) {
-            $students = Student::withTrashed()->where('username', 'like', '%'.request('search').'%')->paginate(50);
+            $students = Student::withTrashed()
+            ->where('username', 'like', '%'.request('search').'%')
+            ->orWhere('name', 'like', '%'.request('search').'%')
+            ->paginate(50);
         } else {
             $students = Student::withTrashed()->paginate(50);
         }
@@ -105,6 +108,7 @@ class StudentController extends Controller
             'programme' => ['required', 'string', 'max:255'],
             'dob' => ['required', 'date'],
             'level' => ['required', 'string', 'max:255'],
+            'sponsor' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'digits:12', new CustomUnique(Student::class, 'phone',$student->id,'id')],
             'email' => ['required', 'email', new CustomUnique(Student::class, 'email',$student->id,'id')],
             'gender_id' => ['required', 'integer'],

@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
     <a class="navbar-brand" href="{{ route('dashboard') }}">
         <span class="d-none d-md-block">
-            <strong>MUST Accommodation System</strong>
+            <strong>MUST ACCOMMODATION SYSTEM</strong>
         </span>
         <span class="d-block d-md-none">
             <strong>MAS</strong>

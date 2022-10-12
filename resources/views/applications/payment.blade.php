@@ -33,7 +33,8 @@
 
                     @if (session('no_costumer'))
                         <div class="alert alert-danger" role="alert">
-                            <strong>Note: {{ session('no_costumer') }}</strong>
+                            <h5 class="alert-heading">Alert</h5>
+                            {{-- <strong>{{ session('no_costumer') }}</strong> --}}
                             <p>You must use your <a href="https://sims.must.ac.tz" target="_blank">SIMS</a> account to create invoice and pay for administrative fee first, before paying the accommodation fee.</p>
                         </div>
                     @endif
@@ -45,6 +46,7 @@
                             <a href="{{ route('allocation', ['student' => $student->slug, 'academic_year' => $currentAcademicYear->slug]) }}" class="btn btn-primary">Next</a>
                         @endif
                     @else
+                        
                         <form id="form" action="{{ URL::temporarySignedRoute('invoice.create-otp', now()->addMinutes(1), ['otp' => $shortlist->otp, 'student' => $student->slug]) }}" method="POST">
                             @csrf
 
@@ -64,9 +66,42 @@
 
                             <div class="form-group">
                                 {{-- <a href="{{ route('otp.send', $student->slug) }}" class="btn btn-info">Get otp code</a> --}}
-                                <button id="btnSubmit" type="submitForm()" class="btn btn-primary" onclick="submit(); this.disabled = true;">Create invoice</button>
-                            </div>
+                                @if ($student->sponsor == 'government')
+                                    <div class="alert alert-danger" role="alert">
+                                        <h5 class="alert-heading">Note</h5>
+                                        <p>If you are not a government sponsored student and you see this alert then don't click next because you won't be able to create invoice, consult with the Head of Students Welfare first </p>
+                                        <p><strong>Phone Number:</strong> 0755 836 970</p>
+                                    </div>
+                                    <button id="btnSubmit" type="submitForm()" class="btn btn-primary" onclick="submit(); this.disabled = true;">Next</button>
+                                @else
+                                    <div class="alert alert-danger" role="alert">
+                                        <h5 class="alert-heading">Note</h5>
+                                        <p>If you are a government sponsored student and you see this alert then don't create the invoice, consult with the Head of Students Welfare first </p>
+                                        <p><strong>Phone Number:</strong> 0755 836 970</p>
+                                    </div>
 
+                                    <button id="btnSubmit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#sumitForm">Create invoice</button>
+                                @endif
+                            </div>
+                            
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="sumitForm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Are sure?</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                                            <button type="submit" onclick="submitForm(); this.disabled = true;" class="btn btn-primary">Yes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     @endif
 

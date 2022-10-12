@@ -111,6 +111,18 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
+                                    <label for="">Sponsor</label>
+                                    <select class="form-control" name="sponsor">
+                                        <option selected value="{{ null }}">Choose sponsor</option>
+                                        <option {{ old('sponsor', $student->sponsor) == 'private'? 'selected':'' }} value="private">Private</option>
+                                        <option {{ old('sponsor', $student->sponsor) == 'government'? 'selected':'' }} value="government">Government</option>
+                                        <option {{ old('sponsor', $student->sponsor) == 'heslb'? 'selected':'' }} value="heslb">HESLB</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
                                     <label class="font-size-14 mb-4">Gender</label>
                                     <div class="clearfix"></div>
                                     @foreach (App\Models\Gender::all() as $gender)
