@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\ShortlistExport;
 use App\Models\Room;
 use App\Models\Student;
 use App\Models\Shortlist;
@@ -115,4 +116,10 @@ Route::middleware('auth:sanctum')->group(function ()
 // Route::get('get-shortlist', function ()
 // {
 //     return Shortlist::maleShortlist()/* ->with('student') */->count();
+// });
+
+
+// Route::get('export', function ()
+// {
+//     return (new ShortlistExport('male'))->download('shortlists.xlsx');
 // });

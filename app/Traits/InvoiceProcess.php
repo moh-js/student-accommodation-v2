@@ -10,6 +10,9 @@ trait InvoiceProcess {
     public function invoiceCreate($student)
     {
         $amount = 107100;
+        $GFSCode = 141501070144;
+        $description = 'accommodation fee';
+        $currency = 'TZS';
         
         // create invoice
         if (checkEligibility($student)) {
@@ -17,16 +20,13 @@ trait InvoiceProcess {
                 'academic_year_id' => AcademicYear::current()->id
             ]);
     
-            // call billing api for invoice creation
-            $billingService = new BillingServiceProvider('141501070144', 'TZS', $amount, 'accommodation fee');
-    
             $invoice->update([
                 'reference' => $this->generate($invoice),
                 'amount' => $amount
             ]);
     
             // call billing api for invoice creation
-            $billingService = new BillingServiceProvider('141501070144', 'TZS', $invoice->amount, 'accommodation fee');
+            $billingService = new BillingServiceProvider($GFSCode, $currency, $invoice->amount, $description);
     
             try {
     
