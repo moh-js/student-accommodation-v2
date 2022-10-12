@@ -59,7 +59,7 @@ class UserController extends Controller
 
         return view('users.edit', [
             'user' => $user,
-            'roles' => Role::all()
+            'groups' => Role::all()
         ]);
     }
 

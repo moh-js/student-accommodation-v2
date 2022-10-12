@@ -43,13 +43,13 @@
                                 </td>
                                 <td class="text-center">
                                     @if ($user->deleted_at)
-                                        <a href="javascript:void(0)" onclick="$('#{{ $user->username }}').submit()" class="btn btn-info waves-effect waves-light btn-sm"><i class="ri-user-received-line"></i></a>
+                                        <a href="javascript:void(0)" onclick="$('#{{ $user->slug }}').submit()" class="btn btn-info waves-effect waves-light btn-sm"><i class="ri-user-received-line"></i></a>
                                     @else
-                                        <a href="{{ route('users.edit', $user->username) }}" class="btn btn-warning waves-effect waves-light btn-sm"><i class="ri-edit-line"></i></a>
-                                        <a href="javascript:void(0)" onclick="$('#{{ $user->username }}').submit()" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-line"></i></a>
+                                        <a href="{{ route('users.edit', $user->slug) }}" class="btn btn-warning waves-effect waves-light btn-sm"><i class="ri-edit-line"></i></a>
+                                        <a href="javascript:void(0)" onclick="$('#{{ $user->slug }}').submit()" class="btn btn-danger waves-effect waves-light btn-sm"><i class="ri-delete-bin-line"></i></a>
 
                                     @endif
-                                    <form id="{{ $user->username }}" action="{{ route('users.destroy', $user->username) }}" method="post">@csrf @method('DELETE')</form>
+                                    <form id="{{ $user->slug }}" action="{{ route('users.destroy', $user->slug) }}" method="post">@csrf @method('DELETE')</form>
                                 </td>
                             </tr>
                         @endforeach
