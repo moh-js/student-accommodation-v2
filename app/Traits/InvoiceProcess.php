@@ -29,7 +29,8 @@ trait InvoiceProcess {
             // do not create invoice for government sponsored students
             if ($student->sponsor == 'government') { 
                 $invoice->update([
-                    'status' => 1
+                    'status' => 1,
+                    'control_number' => 1
                 ]);
             } else {
                 // call billing api for invoice creation
