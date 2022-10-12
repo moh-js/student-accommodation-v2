@@ -18,11 +18,11 @@ class BillingController extends Controller
         //     "control_number":"991541054826"
         //     }');
 
-        $invoice = Invoice::where([['invoice_no', $request->invoice_no], ['reference', $request->reference]])->first();
+        $invoice = Invoice::where([['invoice_no', $request->input('invoice_no')], ['reference', $request->input('reference')]])->first();
 
         if ($invoice) {
-            $invoice->update([
-                'control_number' => $request->control_number
+            $invoice->save([
+                'control_number' => $request->input('control_number')
             ]);
 
             return $this->success();
@@ -48,21 +48,21 @@ class BillingController extends Controller
         //     "bank_account":"20901100002"
         //     }');
 
-        $invoice = Invoice::where([['invoice_no', $request->invoice_no], ['reference', $request->reference]])->first();
+        $invoice = Invoice::where([['invoice_no', $request->input('invoice_no')], ['reference', $request->input('reference')]])->first();
 
         if ($invoice) {
-            if ($invoice->receipt == $request->receipt || $invoice->bank_receipt == $request->bank_receipt || $invoice->gateway_receipt == $request->gateway_receipt) {
+            if ($invoice->receipt == $request->input('receipt') || $invoice->bank_receipt == $request->input('bank_receipt') || $invoice->gateway_receipt == $request->input('gateway_receipt')) {
                 return $this->failed();
 
             } else {
-                $invoice->update([
-                    'receipt' => $request->receipt,
-                    'bank_receipt' => $request->bank_receipt,
-                    'gateway_receipt' => $request->gateway_receipt,
-                    'amount_paid' => $invoice->amount_paid + $request->amount,
-                    'currency' => $request->currency,
-                    'trans_date' => $request->trans_date,
-                    'bank_account' => $request->bank_account,
+                $invoice->save([
+                    'receipt' => $request->input('receipt'),
+                    'bank_receipt' => $request->input('bank_receipt'),
+                    'gateway_receipt' => $request->input('gateway_receipt'),
+                    'amount_paid' => $invoice->amount_paid + $request->input('amount'),
+                    'currency' => $request->input('currency'),
+                    'trans_date' => $request->input('trans_date'),
+                    'bank_account' => $request->input('bank_account'),
                 ]);
 
                 $this->validatePayment($invoice);
