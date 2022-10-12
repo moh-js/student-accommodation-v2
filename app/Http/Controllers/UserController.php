@@ -33,13 +33,15 @@ class UserController extends Controller
 
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
+            // 'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
         ]);
 
-        User::firstOrCreate($request->except(['groups', '_token']))->syncRoles($request->groups);
+        $data = collect($request->except(['groups', '_token', 'phone']))->merge(['password' => bcrypt(123456)])->toArray();
+        User::firstOrCreate($data)
+        ->syncRoles($request->groups);
 
         toastr()->success('User added successfully');
         return redirect()->route('users.index');
@@ -74,13 +76,15 @@ class UserController extends Controller
 
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
+            // 'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', "unique:users,email,$user->id,id"],
         ]);
 
-        $user->update($request->except(['groups', '_token']));
+        $data = collect($request->except(['groups', '_token', 'phone']))->merge(['password' => bcrypt(123456)])->toArray();
+
+        $user->update($data);
         $user->syncRoles($request->groups);
 
         toastr()->success('User updated successfully');

@@ -71,10 +71,10 @@
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="username">Username</label>
-                                    <input type="text" name="username" id="username" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" placeholder="Enter username">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" name="phone" id="phone" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" placeholder="Enter phone">
 
-                                    @error('username')
+                                    @error('phone')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
