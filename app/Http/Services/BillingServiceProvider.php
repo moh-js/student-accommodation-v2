@@ -21,9 +21,9 @@ class BillingServiceProvider
     {
         $this->apiCode = env('BILLING_CODE');
         $this->apiKey = env('BILLING_KEY');
-        $this->nonCustomerInvouiceURL = env('BILLING_URL').'/v1/noncustomer_invoice_receiver';
-        $this->customerInvoiceURL = env('BILLING_URL').'/v1/customer_invoice_receiver';
-        $this->registerCostumer = env('BILLING_URL').'/v1/register_customer';
+        $this->nonCustomerInvouiceURL = env('BILLING_URL').'/index.php/v1/noncustomer_invoice_receiver';
+        $this->customerInvoiceURL = env('BILLING_URL').'/index.php/v1/customer_invoice_receiver';
+        $this->registerCostumer = env('BILLING_URL').'/index.php/v1/register_customer';
         
         $this->itemGFSCode = $itemGFSCode;
         $this->currency = $currency;
