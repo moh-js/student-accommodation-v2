@@ -112,7 +112,7 @@ class InvoiceController extends Controller
         ]);
 
         $invoice->update([
-            'control_number' => $request->control_number??$invoice->control_number
+            'control_number' => $request->control_number??null
         ]);
 
         toastr()->success('Data updated successfully');
