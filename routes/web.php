@@ -109,10 +109,10 @@ Route::middleware('auth:sanctum')->group(function ()
 
 // Route::get('api-test', [TestController::class, 'testApi']);
 
-// Route::get('get-rooms', function ()
-// {
-//    return Room::all()->sum('capacity');
-// });
+Route::get('get-rooms', function ()
+{
+   return Room::maleRooms()->get()->sum('capacity');
+});
 
 // Route::get('get-shortlist', function ()
 // {

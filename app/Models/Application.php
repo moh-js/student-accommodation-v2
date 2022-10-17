@@ -22,6 +22,14 @@ class Application extends Model
         return $this->belongsTo(Student::class);
     }
 
+    public function scopeByGender($query, $gender_id)
+    {
+        return $query->whereHas('student', function (Builder $q) use ($gender_id)
+        {
+            $q->where('gender_id', $gender_id);
+        });
+    }
+
     public function getRouteKeyName()
     {
         return 'application_id';
