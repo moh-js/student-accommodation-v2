@@ -31,7 +31,9 @@
                     <table class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
+                            <th>#</th>
                             <th>Full Name</th>
+                            <th>Reg #</th>
                             <th>Programme</th>
                             <th>Phone</th>
                             <th>Sponsor</th>
@@ -42,9 +44,11 @@
     
     
                         <tbody>
-                        @foreach ($students as $student)
+                        @foreach ($students as $key => $student)
                                 <tr>
+                                    <td>{{ $key + $students->firstItem() }}</td>
                                     <td>{{ $student->name }}</td>
+                                    <td>{{ $student->username }}</td>
                                     <td>{{ $student->programme }}</td>
                                     <td>{{ $student->phone }}</td>
                                     <td>{{ $student->sponsor }}</td>

@@ -60,7 +60,23 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         $this->authorize('student-add');
-        //
+        
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:200'],
+            'programme' => ['required', 'string', 'max:255'],
+            'dob' => ['required', 'date'],
+            'level' => ['required', 'string', 'max:255'],
+            'sponsor' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'digits:12', new CustomUnique(Student::class, 'phone')],
+            'email' => ['required', 'email', new CustomUnique(Student::class, 'email')],
+            'gender_id' => ['required', 'integer'],
+            'username' => ['required', 'string', new CustomUnique(Student::class, 'username')]
+        ]);
+
+        Student::firstOrCreate($data);
+        toastr()->success('Student added successfully');
+        
+        return redirect()->route('students.index');
     }
 
     /**

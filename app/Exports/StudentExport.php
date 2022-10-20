@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Student;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -38,6 +39,7 @@ class StudentExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMapp
             'Level',
             'Sponsor',
             'Student Type',
+            'Created On',
             'Status',
         ];
     }
@@ -64,8 +66,10 @@ class StudentExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMapp
             $student->level,
             $student->sponsor,
             $student->student_type,
+            $student->created_at->format('d M y'),
             $student->status ? 'Active' : 'Inactive'
         ];
+
     }
 
     public function styles(Worksheet $sheet)
