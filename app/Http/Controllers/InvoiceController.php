@@ -24,7 +24,7 @@ class InvoiceController extends Controller
         $this->authorize('invoice-view');
 
 
-        $invoices = Invoice::where('academic_year_id', $academicYear->id)->orderBy('id', 'desc')->get();
+        $invoices = Invoice::where('academic_year_id', $academicYear->id)->orderBy('id', 'desc')->paginate(50);
 
         return view('payments.index', [
             'year' => $academicYear,

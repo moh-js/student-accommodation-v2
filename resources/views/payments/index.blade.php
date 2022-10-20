@@ -28,6 +28,7 @@
                     <table id="datatable" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
+                            <th>#</th>
                             <th>Registration #</th>
                             <th>Student Name</th>
                             <th>Invoice #</th>
@@ -42,8 +43,9 @@
     
     
                         <tbody>
-                            @foreach ($invoices as $invoice)
+                            @foreach ($invoices as $key => $invoice)
                                 <tr>
+                                    <th>{{ $key + $invoices->firstItem() }}</th>
                                     <td>{{ $invoice->student->username }}</td>
                                     <td>{{ $invoice->student->name }}</td>
                                     <td>{{ $invoice->invoice_no }}</td>
@@ -114,7 +116,9 @@
                         </tbody>
                     </table>
                 </div>
-
+                <div>
+                    {{ $invoices->appends(request()->input())->links('pagination::bootstrap-5') }}
+                </div>
             </div>
         </div>
     </div> <!-- end col -->
