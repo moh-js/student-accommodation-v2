@@ -35,6 +35,7 @@ class RoleSeeder extends Seeder
                     ['room', 'action' => ['view', 'add', 'update', 'delete']],
                     ['application', 'action' => ['view', 'decline', 'accept', 'update']],
                     ['invoice', 'action' => ['view', 'create', 'delete']],
+                    ['report', 'action' => ['shortlist-export', 'student-export', 'payment-export', 'application-export']],
                     ['shortlist', 'action' => ['view', 'create', 'delete', 'publish']],
                     ['deadline', 'action' => ['view', 'add', 'update']],
                 ]

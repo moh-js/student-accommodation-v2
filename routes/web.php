@@ -1,14 +1,17 @@
 <?php
 
-use App\Exports\ShortlistExport;
 use App\Models\Room;
 use App\Models\Student;
 use App\Models\Shortlist;
 use App\Models\AcademicYear;
+use Illuminate\Http\Request;
+use App\Exports\ShortlistExport;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SideController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\InvoiceController;
@@ -16,9 +19,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DeadlineController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApplicationController;
-use App\Http\Controllers\TestController;
-
-
+use App\Http\Controllers\ReportController;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -29,8 +31,7 @@ Route::get('/', function () {
 /*
 Application routes
 */
-Route::prefix('student')->middleware('guest')->group(function ()
-{
+Route::prefix('student')->middleware('guest')->group(function () {
     Route::get('apply', [ApplicationController::class, 'index'])->name('apply');
     Route::post('apply', [ApplicationController::class, 'studentType'])->name('student-type');
     Route::get('identification', [ApplicationController::class, 'identification'])->name('identification');
@@ -55,10 +56,8 @@ Route::prefix('student')->middleware('guest')->group(function ()
 
 
 // Auth
-Route::middleware('auth:sanctum')->group(function ()
-{
-    Route::prefix('invoices')->controller(InvoiceController::class)->group(function ()
-    {
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('invoices')->controller(InvoiceController::class)->group(function () {
         Route::get('/{academicYear}', 'index')->name('invoices.index');
         Route::post('/fetch', 'fetch')->name('invoices.fetch');
         Route::delete('/{invoice}', 'destroy')->name('invoices.destroy');
@@ -72,8 +71,7 @@ Route::middleware('auth:sanctum')->group(function ()
     Route::resource('sides', SideController::class)->except(['show']);
     Route::resource('rooms', RoomController::class)->except(['show']);
 
-    Route::prefix('applications')->controller(ApplicationController::class)->group(function ()
-    {
+    Route::prefix('applications')->controller(ApplicationController::class)->group(function () {
         Route::get('/', 'applicationLists')->name('applications-list');
         Route::get('/shortlist', 'shortlistPage')->name('shortlist');
         Route::get('/shortlist-publish', 'publish')->name('publish');
@@ -87,19 +85,33 @@ Route::middleware('auth:sanctum')->group(function ()
     Route::post('students-import/goverment', [StudentController::class, 'importGovSponsor'])->name('students.store.gov');
     Route::resource('students', StudentController::class);
 
-    Route::prefix('deadlines')->controller(DeadlineController::class)->group(function ()
-    {
+    Route::prefix('deadlines')->controller(DeadlineController::class)->group(function () {
         Route::get('/', 'index')->name('deadline.index');
         Route::get('/set', 'set')->name('deadline.set');
         Route::post('/set', 'store')->name('deadline.store');
         Route::delete('/{deadline}', 'destroy')->name('deadline.delete');
     });
 
+    // Reports
+    Route::post('export-shortlisted', [ReportController::class, 'exportShortlistedSimple'])->name('export.shortlisted.simple');
+    Route::get('report-payment', [ReportController::class, 'reportPayment'])->name('report.payment');
+    Route::get('export-report-payment', [ReportController::class, 'exportPayment'])->name('export.payment');
+    Route::get('report-shortlisted', [ReportController::class, 'reportShortlisted'])->name('report.shortlisted');
+    Route::get('report-student', [ReportController::class, 'reportStudent'])->name('report.student');
+    Route::get('export-student', [ReportController::class, 'exportStudent'])->name('export.student');
+    Route::get('report-application', [ReportController::class, 'reportApplication'])->name('report.application');
+    Route::get('export-report-application', [ReportController::class, 'exportApplication'])->name('export.application');
+
+
+
+    Route::get('download-file/{path}', function ($file_path) {
+        return response()->download(storage_path('app/' . $file_path));
+    })->name('download.file');
+
     Route::get('invoice-create/{student?}', [InvoiceController::class, 'create'])->name('invoice.create');
     Route::post('invoice-create/{student?}', [InvoiceController::class, 'store'])->name('invoice.store');
-    
-    Route::get('dashboard', [DashboardController::class, 'dashboard'])
-    ->name('dashboard');
+
+    Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 });
 
 // Route::get('test', function ()
@@ -109,10 +121,10 @@ Route::middleware('auth:sanctum')->group(function ()
 
 // Route::get('api-test', [TestController::class, 'testApi']);
 
-Route::get('get-rooms', function ()
-{
-   return Room::maleRooms()->get()->sum('capacity');
-});
+// Route::get('get-rooms', function ()
+// {
+//    return Room::maleRooms()->get()->sum('capacity');
+// });
 
 // Route::get('get-shortlist', function ()
 // {

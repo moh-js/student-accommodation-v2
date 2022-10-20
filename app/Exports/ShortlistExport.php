@@ -2,13 +2,16 @@
 
 namespace App\Exports;
 
+use App\Models\Room;
 use App\Models\Shortlist;
+use App\Models\Application;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ShortlistExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMapping, WithStyles
@@ -51,6 +54,12 @@ class ShortlistExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMa
 
     public function map($shortlist): array
     {
+
+        $maleRooms = Room::maleRooms()->sum('capacity');
+        $femaleRooms = Room::femaleRooms()->sum('capacity');
+        $maleShortlist = Shortlist::maleShortlist()->orderBy('id', 'asc')->with('student')->get();
+        $femaleShortlist = Shortlist::femaleShortlist()->orderBy('id', 'asc')->with('student')->get();
+
         return [
             $shortlist->student->name,
             $shortlist->student->username,
@@ -59,7 +68,7 @@ class ShortlistExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMa
             $shortlist->student->award,
             $shortlist->student->student_type,
             $shortlist->student->sponsor,
-            checkEligibility($shortlist->student) ? 'selected' : 'maximum capacity reached',
+            selected($shortlist->student, $shortlist->student->gender_id, $maleRooms, $femaleRooms, $maleShortlist, $femaleShortlist) ? 'selected' : 'maximum capacity reached',
         ];
     }
 
@@ -70,4 +79,5 @@ class ShortlistExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMa
             1    => ['font' => ['bold' => true]],
         ];
     }
+
 }

@@ -40,6 +40,18 @@
             'title' => 'Payment', 'url' => route('invoices.index', App\Models\AcademicYear::current()->slug), 'permission' => request()->user()->hasAnyPermission('invoice-view'), 'icon' => ' ri-bank-card-2-line', 'childrens' => collect(),
         ], [
             'title' => 'Deadline', 'url' => route('deadline.index'), 'permission' => request()->user()->hasAnyPermission('deadline-view'), 'icon' => 'ri-calendar-2-line', 'childrens' => collect(),
+            'title' => 'Reports', 'url' => 'javascript:void(0)', 'permission' => request()->user()->hasAnyPermission('report-shortlist-export', 'report-student-export', 'report-payment-export', 'report-application-export'), 'icon' => 'ri-file-line', 'childrens' => collect([
+                [
+                    'title' => 'Applications', 'url' => route('report.application'), 'permission' => request()->user()->hasAnyPermission('report-application-export')
+
+                ], [
+                    'title' => 'Shortlisted', 'url' => route('report.shortlisted'), 'permission' => request()->user()->hasAnyPermission('report-shortlist-export')
+                ], [
+                    'title' => 'Invoice Payment', 'url' => route('report.payment'), 'permission' => request()->user()->hasAnyPermission('report-payment-export')
+                ], [
+                    'title' => 'Students', 'url' => route('report.student'), 'permission' => request()->user()->hasAnyPermission('report-student-export')
+                ]
+            ]),
         ]
     ]);
 @endphp
