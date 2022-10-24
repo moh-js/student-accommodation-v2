@@ -21,7 +21,12 @@ class InvoiceList extends Component
         $this->academic_year_id = AcademicYear::current()->id;
     }
 
-    public function updatedStatusSearch()
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedStatus()
     {
         $this->resetPage();
     }
