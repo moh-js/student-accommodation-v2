@@ -21,6 +21,16 @@ class InvoiceList extends Component
         $this->academic_year_id = AcademicYear::current()->id;
     }
 
+    public function updatedStatusSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedAcademicYearId()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
         $invoices = Invoice::where('academic_year_id', $this->academic_year_id)->orderBy('id', 'desc')
