@@ -14,7 +14,7 @@ class InvoiceList extends Component
 
     public $academic_year_id;
     public $status;
-    public $search;
+    public $search = '';
 
     public function mount()
     {
