@@ -51,7 +51,7 @@ class InvoiceList extends Component
                         ->orWhere('username', 'like', "%{$this->search}%");
                 });
             })
-            ->paginate(1);
+            ->paginate(50);
 
         return view('livewire.invoice-list', [
             'invoices' => $invoices
