@@ -146,7 +146,7 @@
                     </table>
                 </div>
                 <div>
-                    {{ $invoices->appends(request()->input())->links('pagination::bootstrap-5') }}
+                    {{ $invoices->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
