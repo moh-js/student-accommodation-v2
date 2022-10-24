@@ -19,24 +19,12 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(AcademicYear $academicYear)
+    public function index()
     {
         $this->authorize('invoice-view');
-
-
-        $invoices = Invoice::where('academic_year_id', $academicYear->id)->orderBy('id', 'desc')->paginate(50);
 
         return view('payments.index', [
-            'year' => $academicYear,
-            'invoices' => $invoices,
         ]);
-    }
-
-    public function fetch(Request $request)
-    {
-        $this->authorize('invoice-view');
-
-        return redirect()->route('invoices.index', $request->input('academic_year_id'));
     }
 
     /**

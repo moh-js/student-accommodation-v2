@@ -15,7 +15,7 @@ class DashboardController extends Controller
     {
         $invoices = Invoice::where('academic_year_id', AcademicYear::current()->id)->get();
         $applications = Application::currentYear();
-        $maleApplication = $applications->byGender(1)->count();
+        $maleApplication = Application::currentYear()->byGender(1)->count();
         $femaleApplication = Application::currentYear()->byGender(2)->count();
         
 
