@@ -72,7 +72,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="phone">Phone</label>
-                                    <input type="text" name="phone" id="phone" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" placeholder="Enter phone">
+                                    <input type="text" name="phone" id="phone" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" placeholder="255654200300">
 
                                     @error('phone')
                                         <div class="invalid-feedback">

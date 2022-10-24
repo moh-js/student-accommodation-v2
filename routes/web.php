@@ -64,8 +64,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{invoice}', 'update')->name('invoices.update');
     });
 
+    Route::get('user/profile', [UserController::class, 'changePersonalInfoPage'])->name('user.profile');
+    Route::post('user', [UserController::class, 'changePersonalInfo'])->name('user.profile.update');
+    Route::post('user-password', [UserController::class, 'changePassword'])->name('user.profile.password');
     Route::resource('users', UserController::class)->except(['show']);
-    Route::post('role', [RoleController::class, 'grantPermission'])->name('role.grant');
+    Route::post('role/{role}', [RoleController::class, 'grantPermission'])->name('role.grant');
     Route::resource('roles', RoleController::class);
     Route::resource('blocks', BlockController::class)->except(['show']);
     Route::resource('sides', SideController::class)->except(['show']);

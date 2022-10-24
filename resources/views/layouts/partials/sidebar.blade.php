@@ -3,9 +3,7 @@
         [
             'title' => 'Dashboard',
             'url' => route('dashboard'),
-            'permission' => request()
-                ->user()
-                ->hasAnyPermission('dashboard'),
+            'permission' => true,
             'icon' => 'ri-dashboard-line',
             'childrens' => collect(),
         ],

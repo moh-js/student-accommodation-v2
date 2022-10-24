@@ -31,15 +31,15 @@ class UserController extends Controller
     {
         $this->authorize('user-add');
 
-        $request->validate([
+        $data = $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            // 'username' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
         ]);
 
-        $data = collect($request->except(['groups', '_token', 'phone']))->merge(['password' => bcrypt(123456)])->toArray();
+        $data = collect($data)->merge(['password' => bcrypt(123456)])->toArray();
         User::firstOrCreate($data)
         ->syncRoles($request->groups);
 
@@ -74,15 +74,15 @@ class UserController extends Controller
     {
         $this->authorize('user-update');
 
-        $request->validate([
+        $data = $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            // 'username' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string'],
             'email' => ['required', 'email', 'max:255', "unique:users,email,$user->id,id"],
         ]);
 
-        $data = collect($request->except(['groups', '_token', 'phone']))->merge(['password' => bcrypt(123456)])->toArray();
+        $data = collect($data)->merge(['password' => bcrypt(123456)])->toArray();
 
         $user->update($data);
         $user->syncRoles($request->groups);
@@ -113,20 +113,6 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-
-    // public function getUsername($user_id = null)
-    // {
-    //     $username = strtolower(substr(request('first_name'), 0, 1).request('last_name'));
-
-    //     $userFound = User::where([['username', $username], ['id', '!=', $user_id]])->count();
-
-    //     if ($userFound) {
-    //         $username = $username.'-'.rand(50);
-    //     }
-
-    //     return $username;
-    // }
-
     public function changePassword(Request $request)
     {
         $request->validate([
@@ -144,5 +130,24 @@ class UserController extends Controller
 
         toastr()->success('Password updated successfully');
         return back();
+    }
+
+    public function changePersonalInfoPage()
+    {
+        return view('profile.index');
+    }
+
+    public function changePersonalInfo(Request $request)
+    {
+        $data = $request->validate([
+            'phone' => ['required', 'string'],
+            'email' => ['required', "unique:users,email,{$request->user()->id},id", 'email']
+        ]);
+
+
+        request()->user()->update($data);
+
+        toastr()->success('Your info updated successfully');
+        return redirect()->back();
     }
 }

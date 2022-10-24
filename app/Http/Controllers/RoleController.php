@@ -85,7 +85,7 @@ class RoleController extends Controller
         $this->authorize('role-grant-permission');
 
         $permissions = $request->except('_token');
-
+        
         $role->syncPermissions($permissions);
 
         toastr()->success('Permissions granted successfully');
