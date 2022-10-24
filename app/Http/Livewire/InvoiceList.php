@@ -16,6 +16,8 @@ class InvoiceList extends Component
     public $status;
     public $search = '';
 
+    protected $paginationTheme = 'bootstrap';
+
     public function mount()
     {
         $this->academic_year_id = AcademicYear::current()->id;
@@ -49,7 +51,7 @@ class InvoiceList extends Component
                         ->orWhere('username', 'like', "%{$this->search}%");
                 });
             })
-            ->paginate(50);
+            ->paginate(1);
 
         return view('livewire.invoice-list', [
             'invoices' => $invoices
