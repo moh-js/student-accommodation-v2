@@ -41,7 +41,7 @@ class UserController extends Controller
 
         $data = collect($data)->merge(['password' => bcrypt(123456)])->toArray();
         User::firstOrCreate($data)
-        ->syncRoles($request->groups);
+            ->syncRoles($request->groups);
 
         toastr()->success('User added successfully');
         return redirect()->route('users.index');
@@ -119,7 +119,7 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'old_password' => ['required', 'string', function ($attribute, $value, $fail) {
                 if (!Hash::check($value, request()->user()->password)) {
-                    $fail('The '.str_replace('_', ' ', $attribute).' incorrect .');
+                    $fail('The ' . str_replace('_', ' ', $attribute) . ' incorrect .');
                 }
             }]
         ]);

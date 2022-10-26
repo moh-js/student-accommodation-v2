@@ -112,13 +112,28 @@
             'childrens' => collect(),
         ],
         [
-            'title' => 'Deadline',
-            'url' => route('deadline.index'),
+            'title' => 'Setting',
+            'url' => 'javascript:void(0)',
             'permission' => request()
                 ->user()
                 ->hasAnyPermission('deadline-view'),
-            'icon' => 'ri-calendar-2-line',
-            'childrens' => collect(),
+            'icon' => 'ri-settings-line',
+            'childrens' => collect([
+                [
+                    'title' => 'Allocation',
+                    'url' => route('deadline.index'),
+                    'permission' => request()
+                        ->user()
+                        ->hasAnyPermission('deadline-view'),
+                ],
+                [
+                    'title' => 'Deadline',
+                    'url' => route('deadline.index'),
+                    'permission' => request()
+                        ->user()
+                        ->hasAnyPermission('deadline-view'),
+                ],
+            ]),
         ],
         [
             'title' => 'Reports',
