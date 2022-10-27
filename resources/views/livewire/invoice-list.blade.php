@@ -106,7 +106,7 @@
                                                     </button>
                                                 </div>
 
-                                                <form action="{{ route('invoices.update', $invoice->slug) }}"
+                                                <form wire:ignore action="{{ route('invoices.update', $invoice->slug) }}"
                                                     id="form{{ $invoice->slug }}" method="post">
                                                     @csrf
                                                     @method('PUT')
