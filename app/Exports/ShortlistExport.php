@@ -55,7 +55,7 @@ class ShortlistExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMa
     public function map($shortlist): array
     {
 
-        $maleRooms = Room::maleRooms()->sum('capacity');
+        $maleRooms = Room::maleRooms()->sum('capacity') - 275;
         $femaleRooms = Room::femaleRooms()->sum('capacity');
         $maleShortlist = Shortlist::maleShortlist()->orderBy('id', 'asc')->with('student')->get();
         $femaleShortlist = Shortlist::femaleShortlist()->orderBy('id', 'asc')->with('student')->get();

@@ -25,7 +25,7 @@ if (!function_exists('selected')) {
     function selected($student, $gender_id, $maleRoomsNumber, $femaleRoomsNumber, $maleShortlist, $femaleShortlist)
     {
         if ($gender_id == 1) { 
-            $roomsCount = $maleRoomsNumber - 275;
+            $roomsCount = $maleRoomsNumber;
             $studentShortlist = $maleShortlist;
         } else {
             $roomsCount = $femaleRoomsNumber;
