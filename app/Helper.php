@@ -24,7 +24,7 @@ if (!function_exists('checkEligibility')) {
 if (!function_exists('selected')) {
     function selected($student, $gender_id, $maleRoomsNumber, $femaleRoomsNumber, $maleShortlist, $femaleShortlist)
     {
-        if ($gender_id == 1) { // check if student is eligible to be selected to get room
+        if ($gender_id == 1) { 
             $roomsCount = $maleRoomsNumber - 275;
             $studentShortlist = $maleShortlist;
         } else {
@@ -34,6 +34,7 @@ if (!function_exists('selected')) {
     
         $studentKeyNumber = $studentShortlist->whereIn('student_id', $student->id)->keys()->first()+1;
         
+        // check if student is eligible to be selected to get room
         return $studentKeyNumber <= $roomsCount;
     }
 }

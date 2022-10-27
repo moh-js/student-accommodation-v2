@@ -108,10 +108,11 @@
 
                                                 <form action="{{ route('invoices.update', $invoice->slug) }}"
                                                     id="form{{ $invoice->slug }}" method="post">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    
                                                     <div class="modal-body">
                                                         <div class="container-fluid">
-                                                            @csrf
-                                                            @method('PUT')
 
                                                             <div class="form-group">
                                                                 <label for="">Control #</label>
@@ -131,15 +132,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <script>
-                                        $('#exampleModal').on('show.bs.modal', event => {
-                                            var button = $(event.relatedTarget);
-                                            var modal = $(this);
-                                            // Use above variables to manipulate the DOM
-
-                                        });
-                                    </script>
                                 </tr>
                             @endforeach
                         </tbody>
