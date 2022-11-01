@@ -36,11 +36,12 @@ class InvoiceController extends Controller
     {
         $this->authorize('invoice-create');
 
-        $students = Student::all();
-
+        // $students = Student::all();
+        
         return view('invoices.create', [
             'student' => $student,
-            'students' => $students
+            'hasInvoice' => $student->currentInvoice(),
+            'eligible' => checkEligibility($student)
         ]);
     }
 

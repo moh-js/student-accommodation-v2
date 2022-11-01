@@ -20,6 +20,7 @@ use App\Http\Controllers\DeadlineController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
@@ -115,12 +116,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('invoice-create/{student?}', [InvoiceController::class, 'store'])->name('invoice.store');
 
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+    // Setting
+    Route::get('settings/allocation', [SettingController::class, 'allocation'])->name('allocation.setting');
+    Route::post('settings/allocation', [SettingController::class, 'allocationStore'])->name('allocation.setting.store');
 });
 
-// Route::get('test', function ()
-// {
-//     return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
-// });
+Route::get('test', function ()
+{
+    // return session('male_rooms');
+    // return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
+});
 
 // Route::get('api-test', [TestController::class, 'testApi']);
 

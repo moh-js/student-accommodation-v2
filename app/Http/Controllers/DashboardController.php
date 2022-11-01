@@ -19,8 +19,8 @@ class DashboardController extends Controller
         $femaleApplication = Application::currentYear()->byGender(2)->count();
         
 
-        $maleRooms = Room::maleRooms()->sum('capacity');
-        $femaleRooms = Room::femaleRooms()->sum('capacity');
+        $maleRooms = roomsAvailable(1);
+        $femaleRooms = roomsAvailable(2);
         $maleShortlist = Shortlist::maleShortlist()->orderBy('id', 'asc')->with('student')->get();
         $femaleShortlist = Shortlist::femaleShortlist()->orderBy('id', 'asc')->with('student')->get();
 

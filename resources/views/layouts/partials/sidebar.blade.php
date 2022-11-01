@@ -121,7 +121,7 @@
             'childrens' => collect([
                 [
                     'title' => 'Allocation',
-                    'url' => route('deadline.index'),
+                    'url' => route('allocation.setting'),
                     'permission' => request()
                         ->user()
                         ->hasAnyPermission('deadline-view'),
