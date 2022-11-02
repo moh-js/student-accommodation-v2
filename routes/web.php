@@ -117,6 +117,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
+    // Anonymous Invoice creation
+    Route::get('invoice/create', [InvoiceController::class, 'createNonRegisteredStudentInvoice'])->name('invoice.create.nonstudent');
+
     // Setting
     Route::get('settings/allocation', [SettingController::class, 'allocation'])->name('allocation.setting');
     Route::post('settings/allocation', [SettingController::class, 'allocationStore'])->name('allocation.setting.store');

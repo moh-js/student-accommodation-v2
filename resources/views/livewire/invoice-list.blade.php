@@ -1,5 +1,10 @@
 <div class="row">
     <div class="col-12">
+        <div class="float-right mb-4">
+            <a href="{{ route('invoice.create.nonstudent') }}" class="btn btn-primary">Create Invoice</a>
+        </div>
+
+        <div class="clearfix"></div>
         <div class="card">
             <div class="card-body">
 
@@ -119,6 +124,13 @@
                                                                 <input type="text" name="control_number"
                                                                     id="control_number" class="form-control"
                                                                     placeholder="994360XXXXXX">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="">Control #</label>
+                                                                <input type="text" name="status"
+                                                                    id="status" class="form-control"
+                                                                    placeholder="0" value="{{ $invoice->status }}">
                                                             </div>
                                                         </div>
                                                     </div>

@@ -46,6 +46,21 @@ class InvoiceController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createNonRegisteredStudentInvoice()
+    {
+        $this->authorize('invoice-create-non-student');
+
+        // $students = Student::all();
+        
+        return view('invoices.create', [
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -101,7 +116,8 @@ class InvoiceController extends Controller
         ]);
 
         $invoice->update([
-            'control_number' => $request->control_number??null
+            'control_number' => $request->control_number??null,
+            'status' => $request->status
         ]);
 
         toastr()->success('Data updated successfully');
