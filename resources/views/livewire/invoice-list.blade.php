@@ -127,9 +127,9 @@
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="">Control #</label>
+                                                                <label for="">Status</label>
                                                                 <input type="text" name="status"
-                                                                    id="status" class="form-control"
+                                                                    id="status-input" class="form-control"
                                                                     placeholder="0" value="{{ $invoice->status }}">
                                                             </div>
                                                         </div>
