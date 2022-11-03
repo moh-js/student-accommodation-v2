@@ -95,57 +95,57 @@
                                         <form id="{{ $invoice->slug }}"
                                             action="{{ route('invoices.destroy', $invoice->slug) }}" method="post">
                                             @csrf @method('DELETE')</form>
-                                    </td>
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="modal{{ $invoice->slug }}" tabindex="-1"
-                                        role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <form action="{{ route('invoices.update', $invoice->slug) }}"
-                                                id="form{{ $invoice->slug }}" method="post">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Enter Control Number
-                                                            {{ $invoice->student->name }}</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modal{{ $invoice->slug }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <form action="{{ route('invoices.update', $invoice->slug) }}"
+                                                    id="form{{ $invoice->slug }}" method="post">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Edit Payment of
+                                                                {{ $invoice->student->name }}</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
 
 
-                                                    @csrf
-                                                    @method('PUT')
+                                                        @csrf
+                                                        @method('PUT')
 
-                                                    <div class="modal-body">
-                                                        <div class="container-fluid">
+                                                        <div class="modal-body">
+                                                            <div class="container-fluid text-left">
 
-                                                            <div class="form-group">
-                                                                <label for="">Control #</label>
-                                                                <input type="text" name="control_number"
-                                                                    id="control_number"
-                                                                    value="{{ $invoice->control_number }}"
-                                                                    class="form-control" placeholder="994360XXXXXX">
-                                                            </div>
+                                                                <div class="form-group">
+                                                                    <label for="">Control #</label>
+                                                                    <input type="text" name="control_number"
+                                                                        id="control_number"
+                                                                        value="{{ $invoice->control_number }}"
+                                                                        class="form-control" placeholder="994360XXXXXX">
+                                                                </div>
 
-                                                            <div class="form-group">
-                                                                <label for="">Status</label>
-                                                                <input type="text" name="status" id="status-input"
-                                                                    class="form-control" placeholder="0"
-                                                                    value="{{ $invoice->status }}">
+                                                                <div class="form-group">
+                                                                    <label for="">Status</label>
+                                                                    <input type="text" name="status"
+                                                                        id="status-input" class="form-control"
+                                                                        placeholder="0" value="{{ $invoice->status }}">
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-danger"
-                                                            data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save</button>
-                                                    </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger"
+                                                                data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Save</button>
+                                                        </div>
 
-                                                </div>
-                                            </form>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
