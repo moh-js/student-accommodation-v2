@@ -101,36 +101,38 @@
                                     <div class="modal fade" id="modal{{ $invoice->slug }}" tabindex="-1"
                                         role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Enter Control Number
-                                                        {{ $invoice->student->name }}</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
+                                            <form action="{{ route('invoices.update', $invoice->slug) }}"
+                                                id="form{{ $invoice->slug }}" method="post">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Enter Control Number
+                                                            {{ $invoice->student->name }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
 
-                                                <form action="{{ route('invoices.update', $invoice->slug) }}"
-                                                    id="form{{ $invoice->slug }}" method="post">
+
                                                     @csrf
                                                     @method('PUT')
-                                                    
+
                                                     <div class="modal-body">
                                                         <div class="container-fluid">
 
                                                             <div class="form-group">
                                                                 <label for="">Control #</label>
                                                                 <input type="text" name="control_number"
-                                                                    id="control_number" value="{{ $invoice->control_number }}" class="form-control"
-                                                                    placeholder="994360XXXXXX">
+                                                                    id="control_number"
+                                                                    value="{{ $invoice->control_number }}"
+                                                                    class="form-control" placeholder="994360XXXXXX">
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="">Status</label>
-                                                                <input type="text" name="status"
-                                                                    id="status-input" class="form-control"
-                                                                    placeholder="0" value="{{ $invoice->status }}">
+                                                                <input type="text" name="status" id="status-input"
+                                                                    class="form-control" placeholder="0"
+                                                                    value="{{ $invoice->status }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -139,9 +141,9 @@
                                                             data-dismiss="modal">Close</button>
                                                         <button type="submit" class="btn btn-primary">Save</button>
                                                     </div>
-                                                </form>
 
-                                            </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </tr>
