@@ -117,7 +117,7 @@ class InvoiceController extends Controller
 
         $invoice->update([
             'control_number' => $request->control_number??null,
-            'status' => $request->status
+            'status' => $request->status,
         ]);
 
         toastr()->success('Data updated successfully');

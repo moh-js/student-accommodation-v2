@@ -111,7 +111,7 @@
                                                     </button>
                                                 </div>
 
-                                                <form wire:ignore action="{{ route('invoices.update', $invoice->slug) }}"
+                                                <form action="{{ route('invoices.update', $invoice->slug) }}"
                                                     id="form{{ $invoice->slug }}" method="post">
                                                     @csrf
                                                     @method('PUT')
@@ -122,7 +122,7 @@
                                                             <div class="form-group">
                                                                 <label for="">Control #</label>
                                                                 <input type="text" name="control_number"
-                                                                    id="control_number" class="form-control"
+                                                                    id="control_number" value="{{ $invoice->control_number }}" class="form-control"
                                                                     placeholder="994360XXXXXX">
                                                             </div>
 
