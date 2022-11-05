@@ -16,7 +16,8 @@ class CreateAllocationSetting extends SettingsMigration
 
     public function up(): void
     {
-        $this->migrator->add('allocation.room_reserved', 0);
+        $this->migrator->add('allocation.female_reserved_room', 0);
+        $this->migrator->add('allocation.male_reserved_room', 0);
         $this->migrator->add('allocation.criteria', [
             [$this->disabled],
             [$this->foreigner],

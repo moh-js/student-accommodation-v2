@@ -21,6 +21,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ShortlistController;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
@@ -118,20 +119,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     // Anonymous Invoice creation
-    Route::get('invoice/create', [InvoiceController::class, 'createNonRegisteredStudentInvoice'])->name('invoice.create.nonstudent');
+    Route::get('invoice/create', [InvoiceController::class, 'createNonRegisteredStudentInvoicePage'])->name('invoice.create.nonstudent');
+    Route::post('invoice/store', [InvoiceController::class, 'createNonRegisteredStudentInvoice'])->name('invoice.store.nonstudent');
 
     // Setting
     Route::get('settings/allocation', [SettingController::class, 'allocation'])->name('allocation.setting');
     Route::post('settings/allocation', [SettingController::class, 'allocationStore'])->name('allocation.setting.store');
+
+    Route::post('ban-selection', [ShortlistController::class, 'banSelected'])->name('ban.selection');
 });
 
-Route::get('test', function ()
-{
-    // return session('male_rooms');
-    // return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
-});
+// Route::get('test', function ()
+// {
 
-// Route::get('api-test', [TestController::class, 'testApi']);
+//     // return session('male_rooms');
+//     // return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
+// });
+
+Route::get('ban-test', [TestController::class, 'banTest']);
 
 // Route::get('get-rooms', function ()
 // {

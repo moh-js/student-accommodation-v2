@@ -21,12 +21,19 @@
                     </div>
                     <div class="float-left">
                         <a href="{{ route('publish') }}" class="btn btn-warning">Publish Shortlisted</a>
+                        
+                        <a href="javascript:void(0)" onclick="banShortlist()" class="btn btn-danger">Ban Selection</a>
 
                         <!-- Button trigger modal -->
-                        <button type="button" class="ml-sm-3 mt-0 mt-xs-2 btn btn-primary" data-toggle="modal"
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
                             data-target="#export-published">
                             Export Published
                         </button>
+
+                        <form hidden id="ban" action="{{ route('ban.selection') }}" method="post">
+                            @csrf
+                        </form>
+
                         <div class="clearfix"></div>
                         <div class="mt-4">
                             @if (session()->has('shortlist_file_name'))
@@ -35,7 +42,8 @@
                                         $file_path = storage_path('app/' . session('shortlist_file_name'));
                                     @endphp
                                     Download the exported excel for shortlisted students
-                                    <a href="{{ route('download.file', session('shortlist_file_name')) }}">{{ session('shortlist_file_name') }}</a>
+                                    <a
+                                        href="{{ route('download.file', session('shortlist_file_name')) }}">{{ session('shortlist_file_name') }}</a>
                                 @endif
                             @endif
                         </div>
@@ -156,6 +164,12 @@
         function removeShortlist(id) {
             if (confirm('Are you sure? Decline Selection')) {
                 $('#' + id).submit()
+            }
+        }
+
+        function banShortlist(id) {
+            if (confirm('Are you sure? ban student selection')) {
+                $('#ban').submit()
             }
         }
     </script>

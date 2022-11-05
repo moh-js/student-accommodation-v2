@@ -4,7 +4,7 @@
         <div class="form-group">
             <label for="male_reserved_room">Number of Male Reserved Rooms</label>
             <input type="number" name="male_reserved_room" id="male_reserved_room"
-                value="{{ old('male_reserved_room') }}"
+                value="{{ old('male_reserved_room', getRoomReserved()['male']) }}"
                 class="form-control @error('male_reserved_room') is-invalid @enderror">
 
             @error('male_reserved_room')
@@ -19,7 +19,7 @@
         <div class="form-group">
             <label for="female_reserved_room">Number Female of Reserved Rooms</label>
             <input type="number" name="female_reserved_room" id="female_reserved_room"
-                value="{{ old('female_reserved_room') }}"
+                value="{{ old('female_reserved_room', getRoomReserved()['female']) }}"
                 class="form-control @error('female_reserved_room') is-invalid @enderror">
 
             @error('female_reserved_room')

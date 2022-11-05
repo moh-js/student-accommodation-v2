@@ -13,7 +13,7 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $invoices = Invoice::where('academic_year_id', AcademicYear::current()->id)->get();
+        $invoices = Invoice::where('academic_year_id', AcademicYear::current()->id)->with('student')->get();
         $applications = Application::currentYear();
         $maleApplication = Application::currentYear()->byGender(1)->count();
         $femaleApplication = Application::currentYear()->byGender(2)->count();
@@ -31,6 +31,8 @@ class DashboardController extends Controller
 
         return view('dashboard', [
             'invoices' => $invoices,
+            'invoicesMale' => $invoices->pluck('student')->where('gender_id', 1),
+            'invoicesFemale' => $invoices->pluck('student')->where('gender_id', 2),
             'shortlisted' => $shortlisted->filter(),
             'applications' => $applications,
             'maleApplication' => $maleApplication,

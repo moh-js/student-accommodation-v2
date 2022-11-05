@@ -5,7 +5,7 @@
 {{-- Payment Dashboard --}}
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card">
             <div class="card-body">
                 <div class="media">
@@ -32,7 +32,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card">
             <div class="card-body">
                 <div class="media">
@@ -72,9 +72,21 @@
                     </div>
                 </div>
             </div>
+            <div class="card-body border-top py-3">
+                <div class="text-truncate d-flex">
+                    <div class="d-inline mr-3">
+                        <span><i class="mdi mdi-human-male"> </i> Male</span>
+                        <span class="badge badge-soft-success font-size-13"> {{ $invoicesMale->count() }}</span>
+                    </div>
+                    <div class="d-inline">
+                        <span><i class="mdi mdi-human-female"> </i> Female</span>
+                        <span class="badge badge-soft-success font-size-13"> {{ $invoicesFemale->count() }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-body">
                 <div class="media">
@@ -89,7 +101,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-body">
                 <div class="media">

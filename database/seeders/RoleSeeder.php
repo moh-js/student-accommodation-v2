@@ -25,6 +25,7 @@ class RoleSeeder extends Seeder
                     ['block', 'action' => ['view', 'add', 'update', 'delete']],
                     ['side', 'action' => ['view', 'add', 'update', 'delete']],
                     ['room', 'action' => ['view', 'add', 'update', 'delete']],
+                    ['ban', 'action' => ['selection']],
                     ['student', 'action' => ['view', 'add', 'update','remove-allocation', 'allocation', 'delete']],
                 ]
             ], [

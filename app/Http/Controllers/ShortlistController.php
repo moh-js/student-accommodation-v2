@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shortlist;
+use App\Traits\ShortlistProcess;
 use Illuminate\Http\Request;
 
 class ShortlistController extends Controller
 {
+    use ShortlistProcess;
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +17,16 @@ class ShortlistController extends Controller
     public function index()
     {
         //
+    }
+
+    public function banSelected()
+    {
+        $this->authorize('ban-selection');
+
+        $this->ban();
+
+        toastr()->success("Process completed successfully");
+        return back();
     }
 
     /**

@@ -50,14 +50,44 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function createNonRegisteredStudentInvoice()
+    public function createNonRegisteredStudentInvoicePage()
     {
         $this->authorize('invoice-create-non-student');
 
-        // $students = Student::all();
-        
-        return view('invoices.create', [
+        return view('invoices.anony-invoice', [
         ]);
+    }
+
+    public function createNonRegisteredStudentInvoice(Request $request)
+    {
+        $request->validate([
+            'username' => ['required', 'string'],
+            'full_name' => ['required', 'string'],
+            'gender_id' => ['required', 'integer']
+        ]);
+
+        $student = Student::firstOrCreate([
+            'username' => $request->username
+        ], [
+            'name' => $request->full_name,
+            'gender_id' => $request->gender_id,
+            'sponsor' => 'private',
+            'is_fresher' => 0,
+            'student_type' => 'continuous'
+        ]);
+
+        if ($student->currentInvoice()) {
+            toastr()->error('Student has already created an invoice');
+            return back()->withInput();
+        }
+
+        if ($this->make($student)) {
+            toastr()->success('Invoice created successfully');
+            return redirect()->back();
+        } else {
+            // toastr()->error('Invoice could no be created no space available to accommodate');
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
