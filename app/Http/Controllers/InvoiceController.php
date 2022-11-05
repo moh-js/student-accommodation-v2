@@ -52,7 +52,7 @@ class InvoiceController extends Controller
      */
     public function createNonRegisteredStudentInvoicePage()
     {
-        $this->authorize('invoice-create-non-student');
+        $this->authorize('invoice-create-nonapplicant');
 
         return view('invoices.anony-invoice', [
         ]);
@@ -60,6 +60,8 @@ class InvoiceController extends Controller
 
     public function createNonRegisteredStudentInvoice(Request $request)
     {
+        $this->authorize('invoice-create-nonapplicant');
+
         $request->validate([
             'username' => ['required', 'string'],
             'full_name' => ['required', 'string'],

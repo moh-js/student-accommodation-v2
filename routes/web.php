@@ -136,7 +136,7 @@ Route::middleware('auth:sanctum')->group(function () {
 //     // return dd(smsapi(["255658106643","255679319717"], "Hello Guys"));
 // });
 
-Route::get('ban-test', [TestController::class, 'banTest']);
+// Route::get('ban-test', [TestController::class, 'banTest']);
 
 // Route::get('get-rooms', function ()
 // {
