@@ -18,11 +18,12 @@ class ShortlistExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMa
 {
     use Exportable;
 
-    protected $gender;
+    protected $gender_id;
 
-    public function __construct($gender = null)
+    public function __construct($gender_id = null, $type)
     {
-        $this->gender = $gender ?? 3;
+        $this->gender_id = $gender ?? 3;
+        $this->type = $type;
     }
 
     public function headings(): array
@@ -41,12 +42,18 @@ class ShortlistExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMa
 
     public function query()
     {
-        if ($this->gender === 1) {
-            $shortlist = Shortlist::maleShortlist()->orderBy('id', 'asc')->with('student');
-        } elseif ($this->gender === 2) {
-            $shortlist = Shortlist::femaleShortlist()->orderBy('id', 'asc')->with('student');
-        } else if ($this->gender === 3) {
-            $shortlist = Shortlist::query()->orderBy('id', 'asc')->with('student');
+        if ($this->type == 2) {
+            $shortlist = Shortlist::withoutGlobalScope('banned')->where('is_banned', 1);
+        } else {
+            $shortlist = Shortlist::query();
+        }
+
+        if ($this->gender_id === 1) {
+            $shortlist->maleShortlist()->orderBy('id', 'asc')->with('student');
+        } elseif ($this->gender_id === 2) {
+            $shortlist->femaleShortlist()->orderBy('id', 'asc')->with('student');
+        } else if ($this->gender_id === 3) {
+            $shortlist->orderBy('id', 'asc')->with('student');
         }
 
         return $shortlist;

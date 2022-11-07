@@ -18,14 +18,17 @@ class ReportController extends Controller
     {
         Gate::authorize('report-shortlist-export');
 
-        $name = now()->format('ydhi');
+        $gender = ($request->gender_id == 3)? '_all':(($request->gender_id == 1)?'_male':'_female'); 
+        $type = ($request->type == 1)? null:($request->type == 2?'_banned':null);
+
+        $name = now()->format('ydhi').$gender.$type;
 
         session(['shortlist_file_name' => $name . "_shortlists.xlsx"]);
 
         if ($request->gender_id == null) {
-            (new ShortlistExport)->queue($name . "_shortlists.xlsx");
+            (new ShortlistExport(null,$request->type))->queue($name . "_shortlists.xlsx");
         } else {
-            (new ShortlistExport((int)$request->input('gender_id')))->queue($name . "_shortlists.xlsx");
+            (new ShortlistExport((int)$request->input('gender_id'), $request->type))->queue($name . "_shortlists.xlsx");
         }
 
         toastr()->success('export process started successfully');

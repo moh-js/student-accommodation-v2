@@ -46,7 +46,6 @@ trait InvoiceProcess
                 'academic_year_id' => AcademicYear::current()->id
             ]);
 
-
             $invoice->update([
                 'reference' => $this->generate($invoice),
                 'amount' => $amount

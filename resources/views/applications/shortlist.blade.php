@@ -27,7 +27,7 @@
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary" data-toggle="modal"
                             data-target="#export-published">
-                            Export Published
+                            Export Shortlisted
                         </button>
 
                         <form hidden id="ban" action="{{ route('ban.selection') }}" method="post">
@@ -56,7 +56,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Select gender base</h5>
+                                    <h5 class="modal-title">Select</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -65,11 +65,20 @@
                                     @csrf
 
                                     <div class="modal-body">
+                                        <label for="gender_id">Gender</label>
                                         <select class="form-control" name="gender_id" id="gender_id">
                                             <option value="{{ 3 }}">All</option>
                                             @foreach (App\Models\Gender::all() as $gender)
                                                 <option value="{{ $gender->id }}">{{ $gender->name }}</option>
                                             @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <label for="type">Type</label>
+                                        <select class="form-control" name="type" id="type">
+                                            <option selected value="{{ 1 }}">All</option>
+                                            <option value="{{ 2 }}">Banned</option>
                                         </select>
                                     </div>
 
