@@ -2,9 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Room;
 use App\Models\Shortlist;
-use App\Models\Application;
 use App\Models\AcademicYear;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -44,13 +42,13 @@ class ShortlistExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMa
 
     public function query()
     {
+        $shortlist = Shortlist::query();
+
         if ($this->type == 2) {
-            $shortlist = Shortlist::withoutGlobalScope('banned')->where('is_banned', 1)->whereDoesntHave('student.invoices', function (Builder $q)
+            $shortlist->withoutGlobalScope('banned')->where('is_banned', 1)->whereDoesntHave('student.invoices', function (Builder $q)
             {
                 $q->where('academic_year_id', AcademicYear::current()->id);
             });
-        } else {
-            $shortlist = Shortlist::query();
         }
 
         if ($this->gender_id === 1) {
