@@ -66,8 +66,8 @@
                             @foreach ($invoices as $key => $invoice)
                                 <tr>
                                     <th>{{ $key + $invoices->firstItem() }}</th>
-                                    <td>{{ $invoice->student->username }}</td>
-                                    <td>{{ $invoice->student->name }}</td>
+                                    <td>{{ $invoice->student->username??'' }}</td>
+                                    <td>{{ $invoice->student->name??'' }}</td>
                                     <td>{{ $invoice->invoice_no }}</td>
                                     <td>{{ $invoice->reference }}</td>
                                     <td>{{ $invoice->control_number }}</td>
