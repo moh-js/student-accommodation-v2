@@ -36,6 +36,8 @@ class BillingServiceProvider
         $data = [
             'customer_no' => $customerNo,
             'reference' => $reference,
+            'ProgrammeCode' => "",
+            'Class' => "",
             'description' => $this->description,
             'amount' => $this->amount,
             'item_code' => $this->itemGFSCode,
