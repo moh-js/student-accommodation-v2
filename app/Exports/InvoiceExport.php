@@ -29,9 +29,11 @@ class InvoiceExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMapp
             'Registration Number',
             'Programme',
             'Level',
+            'Control Number',
             'Sponsor',
             'Paid Amount',
             'Balance/Remaining Amount',
+            'Date Created',
             'Status',
         ];
     }
@@ -52,9 +54,11 @@ class InvoiceExport implements FromQuery, WithHeadings, ShouldAutoSize, WithMapp
             $invoice->student->username,
             $invoice->student->programme,
             $invoice->student->level,
+            $invoice->control_number,
             $invoice->student->sponsor,
             $invoice->amount_paid,
             $invoice->amount - $invoice->amount_paid,
+            $invoice->created_at->format('d-m-Y'),
             $invoice->status ? 'Paid' : 'Pending'
         ];
     }

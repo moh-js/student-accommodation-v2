@@ -138,10 +138,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Route::get('ban-test', [TestController::class, 'banTest']);
 
-// Route::get('get-rooms', function ()
-// {
-//    return Room::maleRooms()->get()->sum('capacity');
-// });
+Route::get('get-rooms', function ()
+{
+   return Room::femaleRooms()->get()->sum('capacity');
+});
 
 // Route::get('get-shortlist', function ()
 // {
