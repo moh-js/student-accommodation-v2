@@ -166,7 +166,7 @@ class InvoiceController extends Controller
     {
         $this->authorize('invoice-delete');
 
-        if ($invoice->control_number || $invoice->status) {
+        if ($invoice->amount_paid || $invoice->status) {
             toastr()->error("Invoice could not be deleted");
         } else {
             $invoice->forceDelete();
