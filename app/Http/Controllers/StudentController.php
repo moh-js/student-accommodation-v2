@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\GovSponsorStudent;
+use Toastr;
 use App\Models\Student;
 use App\Rules\CustomUnique;
 use Illuminate\Http\Request;
+use App\Models\ProgrammeSimsDB;
+use App\Imports\GovSponsorStudent;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Builder;
-use Toastr;
 
 class StudentController extends Controller
 {
@@ -44,7 +45,7 @@ class StudentController extends Controller
     {
         $this->authorize('student-add');
 
-        $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
+        $programmes = /* Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data']; */ ProgrammeSimsDB::where([['status', 1], ['deleted', 0]])->get();
         // return ($programmes);
         return view('students.add', [
             'programmes' => collect($programmes)->sortBy('name')
@@ -100,7 +101,7 @@ class StudentController extends Controller
     {
         $this->authorize('student-update');
 
-        $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
+        $programmes = ProgrammeSimsDB::where([['status', 1], ['deleted', 0]])->get()->toArray();
 
         return view('students.edit', [
             'student' => $student,

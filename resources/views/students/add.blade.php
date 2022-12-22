@@ -84,8 +84,8 @@
                                             name="programme">
                                             <option value="{{ null }}">Choose programme</option>
                                             @foreach ($programmes as $programme)
-                                                <option {{ old('programme') == $programme['name'] ? 'selected' : '' }}
-                                                    value="{{ $programme['name'] }}">{{ $programme['name'] }}</option>
+                                                <option {{ old('programme') == $programme['Code'] ? 'selected' : '' }}
+                                                    value="{{ $programme['Code'] }}">{{ $programme['Name'] }}</option>
                                             @endforeach
                                         </select>
                                         @error('programme')

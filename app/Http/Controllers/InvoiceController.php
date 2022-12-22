@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Student;
 use App\Models\AcademicYear;
-use App\Traits\InvoiceProcess;
-use App\Traits\ReferenceGenerator;
 use Illuminate\Http\Request;
+use App\Traits\InvoiceProcess;
+use App\Models\ProgrammeSimsDB;
+use App\Traits\ReferenceGenerator;
 
 class InvoiceController extends Controller
 {
@@ -23,8 +24,7 @@ class InvoiceController extends Controller
     {
         $this->authorize('invoice-view');
 
-        return view('payments.index', [
-        ]);
+        return view('payments.index', []);
     }
 
     /**
@@ -37,7 +37,7 @@ class InvoiceController extends Controller
         $this->authorize('invoice-create');
 
         // $students = Student::all();
-        
+
         return view('invoices.create', [
             'student' => $student,
             'hasInvoice' => $student->currentInvoice(),
@@ -55,6 +55,7 @@ class InvoiceController extends Controller
         $this->authorize('invoice-create-nonapplicant');
 
         return view('invoices.anony-invoice', [
+            'programmes' => ProgrammeSimsDB::where([['status', 1], ['deleted', 0]])->get()->toArray()
         ]);
     }
 
@@ -65,15 +66,19 @@ class InvoiceController extends Controller
         $request->validate([
             'username' => ['required', 'string'],
             'full_name' => ['required', 'string'],
-            'gender_id' => ['required', 'integer']
+            'gender_id' => ['required', 'integer'],
+            'programme' => ['required', 'string'],
+            'level' => ['required', 'string']
         ]);
 
-        $student = Student::firstOrCreate([
+        $student = Student::updateOrCreate([
             'username' => $request->username
         ], [
             'name' => $request->full_name,
             'gender_id' => $request->gender_id,
             'sponsor' => 'private',
+            'programme' => $request->programme,
+            'level' => $request->level,
             'is_fresher' => 0,
             'student_type' => 'continuous'
         ]);
@@ -148,7 +153,7 @@ class InvoiceController extends Controller
         ]);
 
         $invoice->update([
-            'control_number' => $request->control_number??null,
+            'control_number' => $request->control_number ?? null,
             'status' => $request->status,
         ]);
 

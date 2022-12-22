@@ -19,6 +19,7 @@ use App\Jobs\Shortlist as JobsShortlist;
 use Illuminate\Database\Eloquent\Builder;
 use GuzzleHttp\Exception\ConnectException;
 use App\Http\Services\BillingServiceProvider;
+use App\Models\ProgrammeSimsDB;
 use App\Traits\InvoiceProcess;
 use App\Traits\ReferenceGenerator;
 use Illuminate\Http\Client\ConnectionException;
@@ -68,13 +69,7 @@ class ApplicationController extends Controller
         if (session()->has('student_type')) { // check student type session if contains data
             if (session('student_type') == 'fresher') {
 
-                // In the future use try {} to catch the exception
-                try {
-                    $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
-                } catch (ConnectionException $e) {
-                    toastr()->error('Could not fetch programmes refresh the page', 'Host resolve failure');
-                    $programmes = [];
-                }
+                $programmes = ProgrammeSimsDB::where([['status', 1], ['deleted', 0]])->get();
 
                 return view('applications.identification-fresher', [
                     'programmes' => collect($programmes)->sortBy('name')
@@ -174,13 +169,13 @@ class ApplicationController extends Controller
                     ], [
                         'student_type' => session('student_type'),
                         'name' => Student::generateFullName($student->FirstName, $student->LastName, $student->MiddleName),
-                        'phone' => $student->Mobile??rand(255623000000,255623999999),
+                        'phone' => $student->Mobile ?? rand(255623000000, 255623999999),
                         'level' => $request->level,
                         'sponsor' => strtolower($student->sponsor->name),
-                        'email' => $student->Email??$student->FirstName.'@'.$student->LastName.'.sample',
+                        'email' => $student->Email ?? $student->FirstName . '@' . $student->LastName . '.sample',
                         'edit' => 1,
                         'programme' => title_case($student->programme->Name),
-                        'dob' => $dobChecker?Carbon::parse($student->dob)->toDate():null,
+                        'dob' => $dobChecker ? Carbon::parse($student->dob)->toDate() : null,
                         'gender_id' => Gender::where('short_name', $student->Gender)->first()->id,
                         'verified' => 1,
                         'is_fresher' => 0
@@ -188,7 +183,6 @@ class ApplicationController extends Controller
                 } else {
                     $student = false;
                 }
-
             }
 
             if ($student) {
@@ -209,14 +203,13 @@ class ApplicationController extends Controller
 
             session(['student_type' => $student->student_type]);
 
-            if ($student->currentInvoice()->status??false) {
+            if ($student->currentInvoice()->status ?? false) {
                 return redirect()->route('allocation', ['student' => $student->slug, 'academic_year' => AcademicYear::current()->slug]);
             } else if ($student->currentInvoice()) {
                 return redirect()->route('payment', $student->slug);
             } else {
                 return redirect()->route('application', $student->slug);
             }
-
         } else {
             toastr()->error('Incorrect username or application id');
             return back()->withInput();
@@ -238,21 +231,17 @@ class ApplicationController extends Controller
 
     public function application(Student $student)
     {
-        
 
-        try {
-            $programmes = Http::get('https://must.ac.tz/website_api/public/programmes')->collect()['data'];
-        } catch (ConnectionException $e) {
-            toastr()->error('Could not fetch programmes refresh the page', 'Host resolve failure');
-            $programmes = [];
-        }
+
+        $programmes = ProgrammeSimsDB::where([['status', 1], ['deleted', 0]])->get();
+
 
         return view('applications.application', [
             'deadline' => $student->studentDeadline(),
             'student' => $student,
             'programmes' => collect($programmes)->sortBy('name'),
             'shortlist' => $student->shortlist()->withoutGlobalScope('banned')->first(),
-            'shortlisted' => (null !== $student->shortlist()->withoutGlobalScope('banned')->first())?true:false,
+            'shortlisted' => (null !== $student->shortlist()->withoutGlobalScope('banned')->first()) ? true : false,
         ]);
     }
 
@@ -328,12 +317,12 @@ class ApplicationController extends Controller
         // $otp = new OTP();
         // if ($otp->verifyOTP($student, $request->otp)) { // otp is valid
 
-            // create invoice
-            if ($this->invoiceCreate($student)) {
-                toastr()->success('Invoice created successfully');
-            }
+        // create invoice
+        if ($this->invoiceCreate($student)) {
+            toastr()->success('Invoice created successfully');
+        }
 
-            return back();
+        return back();
         // } else {
         //     toastr()->error('OTP is invalid');
         //     return back();
@@ -373,10 +362,9 @@ class ApplicationController extends Controller
         $this->authorize('application-view');
 
         if ($request->has('search')) {
-            $applications = Application::currentYear()->whereHas('student', function (Builder $query)
-            {
-                $query->where('username', 'like', '%'.request('search').'%')
-                ->orWhere('name', 'like', '%'.request('search').'%');
+            $applications = Application::currentYear()->whereHas('student', function (Builder $query) {
+                $query->where('username', 'like', '%' . request('search') . '%')
+                    ->orWhere('name', 'like', '%' . request('search') . '%');
             })->paginate(50);
         } else {
             $applications = Application::currentYear()->paginate(50);
@@ -426,11 +414,9 @@ class ApplicationController extends Controller
         $this->authorize('shortlist-view');
 
         if ($request->has('search')) {
-            $shortlists = Shortlist::whereHas('student', function (Builder $query)
-            {
-                $query->where('username', 'like', '%'.request('search').'%')
-                ->orWhere('name', 'like', '%'.request('search').'%');
-
+            $shortlists = Shortlist::whereHas('student', function (Builder $query) {
+                $query->where('username', 'like', '%' . request('search') . '%')
+                    ->orWhere('name', 'like', '%' . request('search') . '%');
             })->paginate(50);
         } else {
             $shortlists = Shortlist::paginate(50);
@@ -473,7 +459,7 @@ class ApplicationController extends Controller
         ]);
 
         $student->update([
-            'username' => $request->reg_number,            
+            'username' => $request->reg_number,
         ]);
 
         $student->shortlist->update([
@@ -481,13 +467,12 @@ class ApplicationController extends Controller
         ]);
 
         return redirect()->route('payment', $student->slug);
-
     }
 
     // public function editApplication(Student $student)
     // {
     //     $this->authorize('application-update');
-        
+
     //     return view('applications.application-info-edit', [
     //         'student' => $student
     //     ]);

@@ -11,4 +11,5 @@ class ProgrammeSimsDB extends Model
 
     protected $connection = 'sims';
     protected $table = 'programme';
+
 }

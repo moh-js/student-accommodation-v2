@@ -30,6 +30,13 @@ class Student extends Model
             set: fn ($value) => title_case($value),
         );
     }
+    
+    protected function programme(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ProgrammeSimsDB::where('code', $value)->first()->Name??$value,
+        );
+    }
 
     public function getSlugOptions(): SlugOptions
     {
@@ -41,6 +48,18 @@ class Student extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function getProgrammeCodeAttribute()
+    {
+        return ProgrammeSimsDB::where('Name', $this->programme)->first()->Code??null;
+    }
+
+    public function getClassLevelAttribute()
+    {
+         if($this->level == 'first year') $level = 1; elseif($this->level == 'second year') $level = 2; elseif($this->level == 'third year') $level = 3; elseif($this->level == 'fourth year') $level = 4; else $level = null;
+         
+         return $level;
     }
 
     public static function generateFullName($first_name, $last_name, $middle_name = null)

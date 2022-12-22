@@ -66,6 +66,8 @@ trait InvoiceProcess
                     $response = $billingService->createCustomerInvoice(
                         $student->username,
                         $invoice->reference,
+                        $student->programme_code,
+                        $student->class_level
                     );
 
                     if ($response['code'] === 200) {

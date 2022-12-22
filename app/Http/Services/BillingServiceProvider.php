@@ -31,13 +31,13 @@ class BillingServiceProvider
         $this->description = $description;
     }
 
-    public function createCustomerInvoice($customerNo, $reference)
+    public function createCustomerInvoice($customerNo, $reference, $programmeCode = null, $level = null)
     {
         $data = [
             'customer_no' => $customerNo,
             'reference' => $reference,
-            'ProgrammeCode' => "",
-            'Class' => "",
+            'ProgrammeCode' => $programmeCode,
+            'Class' => $level,
             'description' => $this->description,
             'amount' => $this->amount,
             'item_code' => $this->itemGFSCode,
