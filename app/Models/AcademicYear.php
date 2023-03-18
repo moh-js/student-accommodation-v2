@@ -16,6 +16,10 @@ class AcademicYear extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'end_date' => 'date'
+    ];
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()

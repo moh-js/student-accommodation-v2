@@ -6,6 +6,7 @@ use App\Models\Shortlist;
 use App\Models\AcademicYear;
 use Illuminate\Http\Request;
 use App\Exports\ShortlistExport;
+use App\Http\Controllers\AcademicYearController;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
@@ -75,6 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('blocks', BlockController::class)->except(['show']);
     Route::resource('sides', SideController::class)->except(['show']);
     Route::resource('rooms', RoomController::class)->except(['show']);
+    Route::resource('academic-year', AcademicYearController::class)->except(['show']);
 
     Route::prefix('applications')->controller(ApplicationController::class)->group(function () {
         Route::get('/', 'applicationLists')->name('applications-list');

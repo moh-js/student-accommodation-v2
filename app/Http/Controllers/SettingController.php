@@ -9,11 +9,15 @@ class SettingController extends Controller
 {
     public function allocation()
     {
+        $this->authorize('setting-allocation');
+
         return view('settings.allocation');
     }
 
     public function allocationStore(Request $request, AllocationSettings $settings)
     {
+
+        $this->authorize('setting-allocation');
 
         $request->validate([
            'female_reserved_room' => ['required', 'integer'], 

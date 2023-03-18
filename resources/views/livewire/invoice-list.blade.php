@@ -14,8 +14,8 @@
                         <div class="form-group">
                             <label for="academic_year_id">Academic Year</label>
                             <select class="form-control" wire:model="academic_year_id" id="academic_year_id">
-                                @foreach (App\Models\AcademicYear::all() as $academicYear)
-                                    <option value="{{ $academicYear->slug }}">{{ $academicYear->name }}</option>
+                                @foreach (App\Models\AcademicYear::withTrashed()->get() as $academicYear)
+                                    <option value="{{ $academicYear->id }}">{{ $academicYear->name }}</option>
                                 @endforeach
                             </select>
                         </div>

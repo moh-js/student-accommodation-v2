@@ -29,12 +29,9 @@
             </button>
 
             <!-- App Search-->
-            {{-- <form class="app-search d-none d-lg-block">
-              <div class="position-relative">
-                  <input type="text" class="form-control" placeholder="Search...">
-                  <span class="ri-search-line"></span>
+              <div class="ml-5  d-flex align-items-center">
+                  <strong>Academic Year: {{ \App\Models\AcademicYear::current()->first()->name }}</strong> 
               </div>
-          </form> --}}
 
             {{-- <div class="dropdown dropdown-mega d-none d-lg-block ml-2">
               <button type="button" class="btn header-item waves-effect" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">

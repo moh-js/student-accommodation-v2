@@ -116,15 +116,22 @@
             'url' => 'javascript:void(0)',
             'permission' => request()
                 ->user()
-                ->hasAnyPermission('deadline-view'),
+                ->hasAnyPermission('deadline-view', 'academic-year-view', 'setting-allocation'),
             'icon' => 'ri-settings-line',
             'childrens' => collect([
+                [
+                    'title' => 'Academic Year',
+                    'url' => route('academic-year.index'),
+                    'permission' => request()
+                        ->user()
+                        ->hasAnyPermission('academic-year-view'),
+                ],
                 [
                     'title' => 'Allocation',
                     'url' => route('allocation.setting'),
                     'permission' => request()
                         ->user()
-                        ->hasAnyPermission('deadline-view'),
+                        ->hasAnyPermission('setting-allocation'),
                 ],
                 [
                     'title' => 'Deadline',
@@ -187,8 +194,9 @@
                 <li class="menu-title">Menu</li>
 
                 @foreach ($navigations as $navigation)
-                    @if ($navigation['permission'] ||
-                        auth()->user()->hasRole('super-admin'))
+                    @if (
+                        $navigation['permission'] ||
+                            auth()->user()->hasRole('super-admin'))
                         <li>
                             <a href="{{ $navigation['url'] }}"
                                 class="{{ $navigation['childrens']->count() ? 'has-arrow' : '' }} waves-effect">
@@ -198,15 +206,17 @@
                             @if ($navigation['childrens'])
                                 <ul class="sub-menu" aria-expanded="true">
                                     @foreach ($navigation['childrens'] as $navChild1)
-                                        @if ($navChild1['permission'] ||
-                                            auth()->user()->hasRole('super-admin'))
+                                        @if (
+                                            $navChild1['permission'] ||
+                                                auth()->user()->hasRole('super-admin'))
                                             <li><a href="{{ $navChild1['url'] }}"
                                                     class="{{ $navChild1['childrens'] ?? false ? 'has-arrow' : '' }}">{{ $navChild1['title'] }}</a>
                                                 @if ($navChild1['children'] ?? false)
                                                     <ul class="sub-menu" aria-expanded="true">
                                                         @foreach ($navChild1['children'] as $child)
-                                                            @if ($child['permission'] ||
-                                                                auth()->user()->hasRole('super-admin'))
+                                                            @if (
+                                                                $child['permission'] ||
+                                                                    auth()->user()->hasRole('super-admin'))
                                                                 <li><a
                                                                         href="{{ $child['url'] }}">{{ $child['title'] }}</a>
                                                                 </li>

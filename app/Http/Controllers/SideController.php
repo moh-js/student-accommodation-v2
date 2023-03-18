@@ -48,6 +48,7 @@ class SideController extends Controller
 
         $validatedData = $request->validate([
             'block_id' => ['required', 'integer'],
+            'gender_id' => ['required', 'integer'],
             'name' => ['required', 'string', 'max:255', "unique:sides,name"],
             'short_name' => ['required', 'string', 'max:255', "unique:sides,name"],
             'description' => ['nullable', 'string', 'max:5000'],
@@ -87,6 +88,7 @@ class SideController extends Controller
         $this->authorize('side-update');
 
         $validatedData = $request->validate([
+            'gender_id' => ['required', 'integer'],
             'block_id' => ['required', 'integer'],
             'name' => ['required', 'string', 'max:255', "unique:sides,name,$side->id,id"],
             'short_name' => ['required', 'string', 'max:255', "unique:sides,name,$side->id,id"],

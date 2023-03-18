@@ -15,7 +15,7 @@
 
                         <div class="row">
 
-                            <div class="col-sm-12">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label">Block</label>
                                     <select data-placeholder="Select block" name="block_id" class="form-control @error('block_id') is-invalid @enderror">
@@ -25,6 +25,26 @@
                                     </select>
 
                                     @error('block_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="gender_id">Based Gender</label>
+                                    <select name="gender_id"
+                                        class="form-control @error('gender_id') is-invalid @enderror">
+                                        <option selected value="{{ null }}">Choose Gender</option>
+                                        @foreach (\App\Models\Gender::all() as $gender)
+                                            <option {{ (old('gender_id', $side->gender_id) == $gender->id) ? 'selected' : '' }}
+                                                value="{{ $gender->id }}">{{ $gender->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('gender_id')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
