@@ -71,7 +71,7 @@ class InvoiceController extends Controller
             'level' => ['required', 'string']
         ]);
 
-        $student = Student::updateOrCreate([
+        $student = Student::firstOrCreate([
             'username' => $request->username
         ], [
             'name' => $request->full_name,
