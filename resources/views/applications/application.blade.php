@@ -42,7 +42,7 @@
                                         <strong>Be patient</strong>
                                         <p>The result has not been published yet, kindly wait and continue to visit this page. We will release the result soon.</p>
                                     </div>
-                                
+
                                 @elseif ($shortlist->is_banned)
                                     <div class="alert alert-danger" role="alert">
                                         <strong>Banned</strong>
@@ -53,15 +53,15 @@
                                         <strong>Congrats</strong>
                                         <p>You have been selected for in-campus accommodation. complete the payment to secure your place on time and avoid any inconvinience</p>
                                     </div>
-                                    
+
                                     @if ($student->is_fresher)
                                         <form action="{{ route('payment.fresher', $student->slug) }}" method="post">
                                             @csrf
-    
+
                                             <div class="row">
                                                 <div class="form-group col-sm-6">
                                                     <label for="reg_number">Registration Number
-    
+
                                                         <a href="javascript:void(0)" data-toggle="modal" data-target="#how-to" class="text-info">
                                                             <span class="d-flex align-items-center">
                                                                 <span style=""><i class="mr-1 ri-question-line"></i></span> where do i get registration number
@@ -69,20 +69,20 @@
                                                         </a>
                                                     </label>
                                                     <input type="text" name="reg_number" id="reg_number" class="form-control @error('reg_number') is-invalid @enderror" placeholder="22XXXXXXXXXXXXXX" aria-describedby="reg_number" value="{{ old('reg_number', $shortlist->has_reg_number?$student->username:'') }}">
-                                                    
+
                                                     @error('reg_number')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
                                                 </div>
-        
+
                                                 <div class="form-group col-12">
                                                     <button type="submit" class="btn btn-primary">Next</button>
                                                 </div>
                                             </div>
                                         </form>
-    
+
                                         <!-- Modal -->
                                         <div class="modal fade" id="how-to" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -101,7 +101,7 @@
                                                                 Login to your sims account <a href="https://sims.must.ac.tz" target="_blank">Here</a>
                                                             </li>
                                                             <li>
-                                                                Create your first invoice so that you can pay for registration of your programme 
+                                                                Create your first invoice so that you can pay for registration of your programme
                                                             </li>
                                                             <li>
                                                                 After successfully creating your invoice you should see the list of your invoices, click on the one of the invoice number to download the invoice document
@@ -113,7 +113,7 @@
                                                                 Copy that registration number. and that's it you have your registration number.
                                                             </li>
                                                         </ol>
-    
+
                                                         <h5 class="text-danger">
                                                             If you don't know how to create an invoice click <a target="_blank" href="https://must.ac.tz/portal/frontend/web/uploads/documents/275016319189158611201414121310_8.pdf">here</a> to get the instructions
                                                         </h5>
@@ -124,7 +124,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                     @else
                                         <a href="{{ route('payment', $student->slug) }}" class="btn btn-primary">Next</a>
                                     @endif
@@ -166,9 +166,9 @@
                                             <div class="form-group">
                                                 <label for="">Programme</label>
                                                 <select class="form-control @error('programme') is-invalid @enderror" type="text" name="programme">
-                                                    <option selected value="{{ null }}">Choose the your programme</option>
+                                                    <option selected value="{{ null }}">Choose your programme</option>
                                                     @foreach ($programmes as $programme)
-                                                        <option {{ old('programme', $student->programme) == $programme['name']? 'selected':'' }} value="{{ $programme['name'] }}">{{ $programme['name'] }}</option>
+                                                        <option {{ old('programme', $student->programme) == ($programme['Name'])? 'selected':'' }} value="{{ $programme['Name'] }}">{{ $programme['Name'] }}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('programme')
@@ -183,7 +183,7 @@
                                             <div class="form-group">
                                                 <label for="">Level</label>
                                                 <select class="form-control @error('level') is-invalid @enderror" name="level">
-                                                    <option selected value="{{ null }}">Choose the your level</option>
+                                                    <option selected value="{{ null }}">Choose your level</option>
                                                     <option {{ old('level', $student->level) == 'first year'? 'selected':'' }} value="first year">First Year</option>
                                                     <option {{ old('level', $student->level) == 'second year'? 'selected':'' }} value="second year">Second Year</option>
                                                     <option {{ old('level', $student->level) == 'third year'? 'selected':'' }} value="third year">Third Year</option>
@@ -201,7 +201,7 @@
                                             <div class="form-group">
                                                 <label for="">Award</label>
                                                 <select class="form-control @error('award') is-invalid @enderror" name="award">
-                                                    <option value="{{ null }}">Choose the your award</option>
+                                                    <option value="{{ null }}">Choose your award</option>
                                                     @foreach (['certificate', 'diploma', 'bachelor', 'master', 'PhD', 'postgraduate diploma'] as $item)
                                                         <option {{ old('award', $student->award) == $item? 'selected':'' }} value="{{ $item }}">{{ $item }}</option>
                                                     @endforeach
@@ -213,7 +213,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Email</label>
@@ -225,7 +225,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-            
+
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Phone Number</label>
@@ -237,8 +237,8 @@
                                                 @enderror
                                             </div>
                                         </div>
-            
-                                        <div class="col-md-6">
+
+                                        {{-- <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="">Do you have any disability?</label>
                                                 <select class="form-control" name="disabled" id="disabled">
@@ -247,7 +247,7 @@
                                                 </select>
                                             </div>
                                         </div>
-            
+
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="">Are you a foreigner student?</label>
@@ -261,7 +261,7 @@
                                                     </div>
                                                 @enderror
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                     </div>
                                 </section>
@@ -271,7 +271,7 @@
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sumitForm">
                                 Apply
                             </button>
-                            
+
                             <!-- Modal -->
                             <div class="modal fade" id="sumitForm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">

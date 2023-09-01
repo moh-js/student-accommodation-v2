@@ -32,6 +32,9 @@ class AcademicYear extends Model
         return 'slug';
     }
 
+    /* 
+    * @return Model $acedemic_year
+    */
     public function scopeCurrent($query)
     {
         return $query->where('deleted_at', null)->orderBy('id', 'desc')->first();

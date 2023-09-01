@@ -143,28 +143,19 @@ class ApplicationController extends Controller
             ]);
 
 
-            $student = Student::where([['username', request('id')], ['student_type', 'continuous']])
-                ->orWhereHas('applications', function (Builder $query) {
-                    $query->where([['application_id', request()->id], ['academic_year_id', AcademicYear::current()->id]]);
-                })
-                ->first();
+            // $student = Student::where([['username', request('id')], ['student_type', 'continuous']])
+            //     ->orWhereHas('applications', function (Builder $query) {
+            //         $query->where([['application_id', request()->id], ['academic_year_id', AcademicYear::current()->id]]);
+            //     })
+            //     ->first();
+
+            $student = StudentSimsDB::where('RegNo', $request->id)->first();
 
             if ($student) {
-                if (!($student->currentApplication() ?? false)) {
-                    $student->update([ // update level
-                        'level' => request()->input('level'),
-                    ]);
-                } else {
-                    toastr()->error('Application already sent check status instead');
-                    return back();
-                }
-            } else {
-                $student = StudentSimsDB::where('RegNo', $request->id)->first();
-
                 if (isset($student->dob)) {
                     $dobChecker = checkdate(Carbon::parse($student->dob)->format('m'), Carbon::parse($student->dob)->format('d'), Carbon::parse($student->dob)->format('Y'));
 
-                    $student = Student::firstOrCreate([
+                    $student = Student::updateOrCreate([
                         'username' => $student->RegNo,
                     ], [
                         'student_type' => session('student_type'),
@@ -174,7 +165,7 @@ class ApplicationController extends Controller
                         'sponsor' => strtolower($student->sponsor->name),
                         'email' => $student->Email ?? $student->FirstName . '@' . $student->LastName . '.sample',
                         'edit' => 1,
-                        'programme' => title_case($student->programme->Name),
+                        'programme' => ($student->programme->Name),
                         'dob' => $dobChecker ? Carbon::parse($student->dob)->toDate() : null,
                         'gender_id' => Gender::where('short_name', $student->Gender)->first()->id,
                         'verified' => 1,
@@ -182,6 +173,15 @@ class ApplicationController extends Controller
                     ]);
                 } else {
                     $student = false;
+                }
+
+                if (!($student->currentApplication() ?? false)) {
+                    $student->update([ // update level
+                        'level' => request()->input('level'),
+                    ]);
+                } else {
+                    toastr()->error('Application already sent check status instead');
+                    return back();
                 }
             }
 
@@ -239,7 +239,7 @@ class ApplicationController extends Controller
         return view('applications.application', [
             'deadline' => $student->studentDeadline(),
             'student' => $student,
-            'programmes' => collect($programmes)->sortBy('name'),
+            'programmes' => collect($programmes)->sortBy('Name'),
             'shortlist' => $student->shortlist()->withoutGlobalScope('banned')->first(),
             'shortlisted' => (null !== $student->shortlist()->withoutGlobalScope('banned')->first()) ? true : false,
         ]);
@@ -273,7 +273,7 @@ class ApplicationController extends Controller
                     'academic_year_id' => AcademicYear::current()->id,
                     'student_id' => $student->id
                 ], [
-                    'application_id' => now()->format('y') . $student->id . rand(11299, 1212121),
+                    'application_id' => 'M-'.now()->format('y') . $student->id . rand(11299, 1212121),
                 ]);
 
                 toastr()->success('application sent successfully');
