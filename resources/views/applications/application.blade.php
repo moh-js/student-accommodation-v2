@@ -138,7 +138,7 @@
                         @else
                             <div class="alert alert-success" role="alert">
                                 <strong>Your application is sent successfull</strong>
-                                <p>Your application ID is <strong>{{ $student->currentApplication()->application_id }}</strong> save it for later use. Wait for the result that will be released {{ $deadline->end_date->addDays(3)->format('d M Y') }}</p>
+                                <p>Your application ID is <strong>{{ $student->currentApplication()->application_id }}</strong> save it for later use. Wait for the result that will be released before {{ $deadline->end_date->addDays(3)->format('d M Y') }}</p>
                             </div>
                         @endif
 

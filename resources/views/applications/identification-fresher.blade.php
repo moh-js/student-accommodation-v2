@@ -17,6 +17,7 @@
                             <strong><u>NOTE:</u></strong>
                             <ol>
                                 <li>All foreigner and disabled students must have a supporting documents for proof.</li>
+                                <li>If you are a goverment sponsored student you are not required to apply.</li>
                                 <li>Any misinformation provided below will lead to your application being cancelled and furthermore we will ban you from applying for In Campus Accommodation.</li>
                             </ol>
                         </div>
@@ -73,8 +74,8 @@
                                     <label for="">Programme</label>
                                     <select class="form-control @error('programme') is-invalid @enderror" type="text" name="programme">
                                         <option value="{{ null }}">Choose the your programme</option>
-                                        @foreach ($programmes as $programme)
-                                            <option {{ old('programme') == $programme['name']? 'selected':'' }} value="{{ $programme['name'] }}">{{ $programme['name'] }}</option>
+                                        @foreach ($programmes->sortBy('Name') as $programme)
+                                            <option {{ old('programme') == $programme['Name']? 'selected':'' }} value="{{ $programme['Name'] }}">{{ $programme['Name'] }}</option>
                                         @endforeach
                                     </select>
                                     @error('programme')
@@ -96,7 +97,7 @@
                                         <option {{ old('level') == 'fourth year'? 'selected':'' }} value="fourth year">Fourth Year</option>
                                     </select>
                                     @error('level')
-                                        <div class="text-danger">
+                                        <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
@@ -130,7 +131,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="">Phone Number</label>
-                                    <input type="text" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" name="phone">
+                                    <input type="text" placeholder="255XXXXXXXXX" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" name="phone">
                                     @error('phone')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -169,7 +170,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Are you a foreigner student?</label>
+                                    <label for="">Are you a foreign student? (Not Tanzanian)</label>
                                     <select class="form-control" name="foreigner" id="foreigner">
                                         <option value="{{ 0 }}">No</option>
                                         <option value="{{ 1 }}">Yes</option>

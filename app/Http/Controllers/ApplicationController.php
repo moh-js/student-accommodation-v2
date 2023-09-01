@@ -99,7 +99,12 @@ class ApplicationController extends Controller
                     'gender' => ['required', 'integer'],
                     'username' => ['required', 'string', 'max:15', 'min:15', new CustomUnique(Student::class, 'username'), 'regex:/[^a-zA-Z0-9 .$]/']
                 ], [
-                    'regex' => 'use "/" instead of "."'
+                    'regex' => 'use "/" instead of "."',
+                    'max' => 'Form 4 Index number format should be SXXXX/XXXX/XXXX',
+                    'min' => 'Form 4 Index number format should be SXXXX/XXXX/XXXX'
+                ], [
+                    'dob' => 'date of birth',
+                    'phone' => 'phone number',
                 ]);
 
                 $first_name = $request->first_name;
@@ -116,7 +121,8 @@ class ApplicationController extends Controller
                     'level' => $request->level,
                     'dob' => $request->dob,
                     'email' => $request->email,
-                    'gender_id' => $request->gender
+                    'gender_id' => $request->gender,
+                    'sponsor' => 'private'
                 ]);
 
                 if ($request->foreigner) {
