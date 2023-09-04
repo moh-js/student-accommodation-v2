@@ -268,12 +268,12 @@
                             @endif
 
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sumitForm">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitForm">
                                 Apply
                             </button>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="sumitForm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                            <div class="modal fade" id="submitForm" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">

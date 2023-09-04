@@ -37,6 +37,7 @@ class ApplicationController extends Controller
 
     public function index()
     {
+        request()->session()->flush();
         return view('applications.index');
     }
 
@@ -61,6 +62,7 @@ class ApplicationController extends Controller
 
     public function getStatus()
     {
+        request()->session()->flush();
         return view('applications.get-status');
     }
 
@@ -97,10 +99,11 @@ class ApplicationController extends Controller
                     'phone' => ['required', 'string', 'digits:12', 'unique:students,phone'],
                     'email' => ['required', 'email', new CustomUnique(Student::class, 'email')],
                     'gender' => ['required', 'integer'],
-                    'username' => ['required', 'string', 'max:15', 'min:15', new CustomUnique(Student::class, 'username'), 'regex:/[^a-zA-Z0-9 .$]/']
+                    'username' => ['required', 'string', 'max:15', 'min:15', /* new CustomUnique(Student::class, 'username') ,*/ 'regex:/[^a-zA-Z0-9 .$]/']
                 ], [
                     'regex' => 'use "/" instead of "."',
                     'max' => 'Form 4 Index number format should be SXXXX/XXXX/XXXX',
+                    'digits' => 'phone number format should be 255XXXXXXXXX',
                     'min' => 'Form 4 Index number format should be SXXXX/XXXX/XXXX'
                 ], [
                     'dob' => 'date of birth',
@@ -205,15 +208,20 @@ class ApplicationController extends Controller
     {
         $student = $this->identifyStudentApplication(request());
         if ($student) {
-            toastr()->success('Welcome back ' . $student->name);
 
             session(['student_type' => $student->student_type]);
 
             if ($student->currentInvoice()->status ?? false) {
+                toastr()->success('Welcome back ' . $student->name);
                 return redirect()->route('allocation', ['student' => $student->slug, 'academic_year' => AcademicYear::current()->slug]);
             } else if ($student->currentInvoice()) {
+                toastr()->success('Welcome back ' . $student->name);
                 return redirect()->route('payment', $student->slug);
+            } else if (!$student->currentApplication()) {
+                toastr()->error('You have no current application');
+                return back()->withInput();
             } else {
+                toastr()->success('Welcome back ' . $student->name);
                 return redirect()->route('application', $student->slug);
             }
         } else {
@@ -225,7 +233,8 @@ class ApplicationController extends Controller
     public function identifyStudentApplication(Request $request)
     {
         $request->validate([
-            'id' => ['required', 'string']
+            'id' => ['required', 'string'],
+            'student_type' => ['required', 'string'],
         ]);
 
         return Student::where([['username', $request->id]])
@@ -237,10 +246,7 @@ class ApplicationController extends Controller
 
     public function application(Student $student)
     {
-
-
         $programmes = ProgrammeSimsDB::where([['status', 1], ['deleted', 0]])->get();
-
 
         return view('applications.application', [
             'deadline' => $student->studentDeadline(),
@@ -253,6 +259,7 @@ class ApplicationController extends Controller
 
     public function apply(Student $student, Request $request)
     {
+
         if ($student) {
             if ($student->edit) {
                 $data = $request->validate([
