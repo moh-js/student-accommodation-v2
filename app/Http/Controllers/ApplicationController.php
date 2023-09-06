@@ -37,7 +37,7 @@ class ApplicationController extends Controller
 
     public function index()
     {
-        request()->session()->flush();
+        request()->session()->forget('student_type');
         return view('applications.index');
     }
 
@@ -62,7 +62,7 @@ class ApplicationController extends Controller
 
     public function getStatus()
     {
-        request()->session()->flush();
+        request()->session()->forget('student_type');
         return view('applications.get-status');
     }
 
