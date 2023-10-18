@@ -238,7 +238,7 @@ class ApplicationController extends Controller
         ]);
 
         return Student::where([['username', $request->id]])
-            ->whereHas('applications', function (Builder $query) {
+            ->orWhereHas('applications', function (Builder $query) {
                 $query->where([['application_id', request()->id], ['academic_year_id', AcademicYear::current()->id]]);
             })
             ->first();
