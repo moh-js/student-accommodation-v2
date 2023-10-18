@@ -38,7 +38,7 @@
                 </form>
             </div>
             <div class="col-md-6 nav">
-                <a href="javascript:void(0)" {{-- onclick="$('#status').submit()" --}} class="navlink">
+                <a href="javascript:void(0)" onclick="$('#status').submit()" class="navlink">
                     <div class="icon-in-circle">
                         <i class=" ri-share-forward-2-line text-primary"></i>
                     </div>
