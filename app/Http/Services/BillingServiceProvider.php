@@ -42,7 +42,7 @@ class BillingServiceProvider
             'amount' => $this->amount,
             'item_code' => $this->itemGFSCode,
             'currency' => $this->currency,
-            'payment_option' => 1 // 1.Exact , 2.Partial
+            'payment_option' => 3 // 1.Full , 2.Partial , 3.Exact
         ];
 
         $auth = [
